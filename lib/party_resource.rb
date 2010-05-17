@@ -1,9 +1,19 @@
 module PartyResource
 
   def connect(name, options={})
+    level = options.delete(:on)
     connection = Connection.new(options)
-    meta_def(name) do |*args|
-      connection.call(self, *args)
+
+    if level == :instance
+
+      define_method(name) do |*args|
+        connection.call(self, *args)
+      end
+    else
+      meta_def(name) do |*args|
+        connection.call(self, *args)
+      end
+
     end
   end
 
