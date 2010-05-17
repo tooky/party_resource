@@ -4,22 +4,19 @@ module PartyResource
     level = options.delete(:on)
     connection = Connection.new(options)
 
-    if level == :instance
-
-      define_method(name) do |*args|
-        connection.call(self, *args)
-      end
-    else
-      meta_def(name) do |*args|
-        connection.call(self, *args)
-      end
-
+    define_method_on(level, name) do |*args|
+      connection.call(self, *args)
     end
   end
 
   private
-  def meta_def name, &blk
+  def define_meta_method(name, &blk)
     (class << self; self; end).instance_eval { define_method name, &blk }
+  end
+
+  def define_method_on(level, name, &block)
+    creator = level == :instance ? :define_method : :define_meta_method
+    send(creator, name, &block)
   end
 
   class Connection
