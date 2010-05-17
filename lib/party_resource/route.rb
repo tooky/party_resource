@@ -8,8 +8,13 @@ module PartyResource
     end
 
     def call(context, *args)
-      path = Path.new(@options[:path], context)
+      path = Path.new(@options[:path], context, args)
+      connector.send(@options[:verb], path)
       :foo
+    end
+
+    def connector
+      PartyResource::Connector(@options[:connector])
     end
 
     private
