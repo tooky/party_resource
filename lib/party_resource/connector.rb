@@ -3,12 +3,14 @@ module PartyResource
     Connector.lookup(name)
   end
 
-  class Connector
+  module Connector
     def self.lookup(name)
-      return default if name.nil?
+      name ||= Base.default
+      Base.connectors[name]
     end
 
-    def self.default
+    class Base
     end
   end
+
 end

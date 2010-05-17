@@ -74,7 +74,7 @@ describe "PartyResource" do
     context 'with name == nil' do
       it 'returns the default connector' do
         connector = mock(:connector)
-        PartyResource::Connector.should_receive(:default).and_return(connector)
+        PartyResource::Connector.should_receive(:lookup).with(nil).and_return(connector)
         PartyResource::Connector().should == connector
       end
     end
