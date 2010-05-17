@@ -7,9 +7,9 @@ begin
     gem.name = "party_resource"
     gem.summary = %Q{TODO: one-line summary of your gem}
     gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "steve.tooke@gmail.com"
+    gem.email = "dev+party_resource@edendevelopment.co.uk"
     gem.homepage = "http://github.com/tooky/party_resource"
-    gem.authors = ["Steve Tooke"]
+    gem.authors = ["Tristan Harris", "Steve Tooke"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "yard", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
