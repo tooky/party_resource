@@ -4,7 +4,7 @@ describe PartyResource::Request do
 
   subject { PartyResource::Request.new(verb, path, context, args) }
 
-  context 'GET with static path' do
+  context 'with static path' do
     let_mock(:context)
     let(:path) { 'mypath/file.json' }
     let(:args) { [] }

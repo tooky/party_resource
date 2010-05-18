@@ -49,7 +49,7 @@ describe PartyResource::Connector::Base do
 
   describe '#fetch' do
     let(:options) { {:base_uri => 'http://myserver.test/path'} }
-    let_mock(:data)
+    let_mock(:data, :empty? => false)
     let_mock(:path)
     let(:verb) { :get }
     let(:request) { mock(:request, :path => path, :verb => verb, :data => data) }
@@ -60,6 +60,14 @@ describe PartyResource::Connector::Base do
     it "fetches the request using HTTParty" do
       HTTParty.should_receive(verb).with(path, options.merge(:query => data)).and_return(return_data)
       subject.fetch(request).should == return_data
+    end
+
+    context 'with no data' do
+      let(:data) { {} }
+      it 'does not pass any data' do
+        HTTParty.should_receive(verb).with(anything, options)
+        subject.fetch(request)
+      end
     end
   end
 
