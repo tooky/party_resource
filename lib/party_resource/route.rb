@@ -8,8 +8,8 @@ module PartyResource
     end
 
     def call(context, *args)
-      path = Path.new(@options[:path], context, args)
-      connector.send(@options[:verb], path)
+      path = Request.new(@options[:verb], @options[:path], context, args)
+      connector.fetch(path)
       :foo
     end
 

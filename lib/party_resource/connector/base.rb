@@ -10,10 +10,8 @@ module PartyResource
         @name = name
       end
 
-      [:get, :post, :put, :delete].each do |verb|
-        define_method verb do |path|
-          HTTParty.send(verb, path.url, path.params)
-        end
+      def fetch(request)
+        HTTParty.get(request.url, nil)
       end
 
     private

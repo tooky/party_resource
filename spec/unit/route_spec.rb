@@ -4,8 +4,8 @@ describe PartyResource::Route do
 
   subject { PartyResource::Route.new options }
 
-  let(:path) { mock(:path) }
-  let(:object) { mock(:object) }
+  let_mock(:path)
+  let_mock(:object)
   let(:connector) { mock(:connector, :null_object => true) }
 
   before do
@@ -20,9 +20,9 @@ describe PartyResource::Route do
         let(:options) { { verb => path } }
 
         it "performs a #{verb} request to the path with the connector" do
-          path_object = mock(:path_object)
-          PartyResource::Path.stub(:new => path_object)
-          connector.should_receive(verb).with(path_object)
+          request = mock(:request)
+          PartyResource::Request.should_receive(:new).with(verb, path, object, anything).and_return(request)
+          connector.should_receive(:fetch).with(request)
           subject.call(object)
         end
       end
@@ -40,7 +40,7 @@ describe PartyResource::Route do
       let(:options) { { :get => path } }
 
       it "builds the request path" do
-        PartyResource::Path.should_receive(:new).with(path, object, [])
+        PartyResource::Request.should_receive(:new).with(:get, path, object, [])
         subject.call(object)
       end
 
