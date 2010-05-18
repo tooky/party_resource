@@ -29,4 +29,13 @@ describe PartyResource::Connector do
       PartyResource::Connector::Base.default.should == name
     end
   end
+
+  describe '#new' do
+    it 'creates a new connector' do
+      name = mock(:name)
+      options = mock(:options)
+      PartyResource::Connector.new(name, options)
+      PartyResource::Connector(name).ancestors.should be_include(PartyResource::Connector::Base)
+    end
+  end
 end
