@@ -1,6 +1,13 @@
 module PartyResource
   class Request
-    def initialize(verb, context, path, args)
+    attr_reader :verb, :path
+    def initialize(verb, path, context, args)
+      @verb = verb
+      @path = path
+    end
+
+    def data
+      {}
     end
   end
 end

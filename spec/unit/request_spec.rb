@@ -2,12 +2,17 @@ require 'spec_helper'
 
 describe PartyResource::Request do
 
-  subject { Request.new(context, path, args) }
+  subject { PartyResource::Request.new(verb, path, context, args) }
 
-  context 'with static path' do
+  context 'GET with static path' do
     let_mock(:context)
     let(:path) { 'mypath/file.json' }
-    let_mock(:args)
+    let(:args) { [] }
+    let_mock(:verb)
+
+    its(:verb) { should == verb }
+    its(:path) { should == path }
+    its(:data) { should == {} }
 
   end
 

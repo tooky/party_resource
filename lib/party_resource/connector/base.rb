@@ -11,7 +11,7 @@ module PartyResource
       end
 
       def fetch(request)
-        HTTParty.get(request.url, nil)
+        HTTParty.get(request.path, options.merge(:query => request.data))
       end
 
     private
