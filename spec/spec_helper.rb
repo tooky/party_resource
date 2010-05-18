@@ -5,6 +5,9 @@ require 'rubygems'
 require 'party_resource'
 require 'spec'
 require 'spec/autorun'
+require 'webmock/rspec'
+
+include WebMock
 
 module LetMock
   def let_mock(name, options = {})

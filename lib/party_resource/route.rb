@@ -8,6 +8,7 @@ module PartyResource
     end
 
     def call(context, *args)
+      raise ArgumentError, "wrong number of arguments (#{args.size} for #{@options[:with].size})" unless @options[:with].size == args.size
       path = Request.new(@options[:verb], @options[:path], context, args)
       connector.fetch(path)
       :foo
@@ -19,11 +20,21 @@ module PartyResource
 
     private
     def transform_options(options)
+      options = {:with => []}.merge(options)
+      transform_with_option(options)
+      transform_location_options(options)
+      options
+    end
+
+    def transform_with_option(options)
+      options[:with] = [options[:with]] unless options[:with].is_a?(Array)
+    end
+
+    def transform_location_options(options)
       verbs = options.keys & VERBS
       raise ArgumentError.new("Must define only one verb (#{verbs.inspect} defined)") unless verbs.size == 1
       options[:verb] = verbs.first
       options[:path] = options.delete(options[:verb])
-      options
     end
   end
 end
