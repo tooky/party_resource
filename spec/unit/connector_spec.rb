@@ -33,15 +33,18 @@ describe PartyResource::Connector do
   describe '#new' do
     let_mock(:name)
     let_mock(:options)
+    let_mock(:connector)
 
     before do
       @repository = PartyResource::Connector::Repository.new
       PartyResource::Connector.stub(:repository => @repository)
+      PartyResource::Connector::Base.stub(:new => connector)
     end
 
     it 'creates a new connector' do
+      PartyResource::Connector::Base.should_receive(:new).with(name, options).and_return(connector)
       PartyResource::Connector.new(name, options)
-      PartyResource::Connector(name).ancestors.should be_include(PartyResource::Connector::Base)
+      PartyResource::Connector(name).should == connector
     end
 
     it 'sets the default if it is currently unset' do

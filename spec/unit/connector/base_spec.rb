@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe PartyResource::Connector::Base do
-  describe "#options" do
-    subject { PartyResource::Connector::Base }
+  describe "creation" do
+    subject { PartyResource::Connector::Base.new(:test, options) }
 
     let_mock(:username)
     let_mock(:password)
@@ -18,7 +18,6 @@ describe PartyResource::Connector::Base do
 
       it 'normalizes the base_uri' do
         HTTParty.should_receive(:normalize_base_uri).with(original_uri)
-        subject.options = options
         subject.options.should == {:base_uri => normalized_uri }
       end
     end
@@ -27,7 +26,6 @@ describe PartyResource::Connector::Base do
       let(:options) { { :username => username } }
 
       it 'stores the username' do
-        subject.options = options
         subject.options.should == {:basic_auth => {:username => username, :password => nil} }
       end
     end
@@ -36,7 +34,6 @@ describe PartyResource::Connector::Base do
       let(:options) { { :password => password } }
 
       it 'stores the password' do
-        subject.options = options
         subject.options.should == {:basic_auth => {:password => password, :username => nil} }
       end
     end
@@ -45,9 +42,9 @@ describe PartyResource::Connector::Base do
       let(:options) { { :base_uri => original_uri, :username => username, :password => password } }
 
       it 'stores the options' do
-        subject.options = options
         subject.options.should == {:base_uri => normalized_uri, :basic_auth => {:password => password, :username => username } }
       end
     end
   end
+
 end

@@ -30,7 +30,7 @@ module PartyResource
       end
 
       def new_connector(name, options)
-        connectors[name] = Class.new(Base)
+        connectors[name] = Base.new(name, options)
         self.default = name if default.nil?
       end
 
