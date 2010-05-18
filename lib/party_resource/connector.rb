@@ -5,34 +5,38 @@ module PartyResource
 
   module Connector
     def self.lookup(name)
-      name ||= Base.default
-      Base.connectors[name]
+      name ||= repository.default
+      repository.connectors[name]
     end
 
     def self.default=(name)
-      Base.default = name
+      repository.default = name
     end
 
     def self.new(name, options)
-      Base.new_connector(name, options)
+      repository.new_connector(name, options)
+    end
+
+    def self.repository
+      @repository ||= Repository.new
+    end
+
+    class Repository
+      attr_accessor :default
+
+      def connectors
+        @connectors ||= {}
+      end
+
+      def new_connector(name, options)
+        connectors[name] = Class.new(Base)
+        self.default = name if default.nil?
+      end
+
     end
 
     class Base
-      class << self
-        attr_accessor :default
-
-        def connectors
-          @connectors ||= {}
-        end
-
-        def new_connector(name, options)
-          connectors[name] = Class.new(Base)
-        end
-
-      end
-
       private :initialize
-
     end
   end
 
