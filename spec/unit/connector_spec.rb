@@ -21,4 +21,12 @@ describe PartyResource::Connector do
       PartyResource::Connector.lookup(nil).should == default_connector
     end
   end
+
+  describe '#default=' do
+    it 'sets the default connector name' do
+      name = mock(:name)
+      PartyResource::Connector.default = name
+      PartyResource::Connector::Base.default.should == name
+    end
+  end
 end

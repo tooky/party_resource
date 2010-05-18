@@ -9,7 +9,15 @@ module PartyResource
       Base.connectors[name]
     end
 
+    def self.default=(name)
+      Base.default = name
+    end
+
     class Base
+      class << self
+        attr_accessor :default
+      end
+
     end
   end
 
