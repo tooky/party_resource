@@ -57,3 +57,12 @@ rescue LoadError
     abort "YARD is not available. In order to run yardoc, you must: sudo gem install yard"
   end
 end
+
+begin
+  require 'metric_fu'
+
+rescue LoadError
+  task :"metrics:all" do
+    abort "metric_fu is not available. gem install metric_fu"
+  end
+end
