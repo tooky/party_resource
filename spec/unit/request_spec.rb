@@ -7,12 +7,25 @@ describe PartyResource::Request do
   context 'with static path' do
     let_mock(:context)
     let(:path) { 'mypath/file.json' }
-    let(:args) { [] }
+    let(:args) { {} }
     let_mock(:verb)
 
     its(:verb) { should == verb }
     its(:path) { should == path }
     its(:data) { should == {} }
+
+  end
+
+  context 'with a parameter' do
+    let_mock(:context)
+    let(:path) { 'mypath/file.json' }
+    let_mock(:value)
+    let(:args) { {:param => value} }
+    let_mock(:verb)
+
+    its(:verb) { should == verb }
+    its(:path) { should == path }
+    its(:data) { should == args }
 
   end
 

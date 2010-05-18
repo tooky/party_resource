@@ -36,14 +36,28 @@ describe PartyResource::Route do
       end
     end
 
-    context "with a no named variables" do
+    context "with no variables" do
       let(:options) { { :get => path } }
 
       it "builds the request path" do
-        PartyResource::Request.should_receive(:new).with(:get, path, object, [])
+        PartyResource::Request.should_receive(:new).with(:get, path, object, {})
         subject.call(object)
       end
 
+    end
+
+    context "with some variables" do
+      let(:options) { { :get => path, :with => [:a, :b, :c] } }
+
+      it "builds the request path" do
+        PartyResource::Request.should_receive(:new).with(:get, path, object, {:a => 1, :b => 2, :c => 3})
+        subject.call(object, 1, 2, 3)
+      end
+
+      it "raises an ArgumentError for the wrong number of arguments" do
+        lambda { subject.call(object, 1, 2, 3, 4) }.should raise_error(ArgumentError)
+        lambda { subject.call(object) }.should raise_error(ArgumentError)
+      end
     end
 
   end
