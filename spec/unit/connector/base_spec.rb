@@ -47,4 +47,23 @@ describe PartyResource::Connector::Base do
     end
   end
 
+  describe 'verb methods' do
+    let(:options) { {:base_uri => 'http://myserver.test/path'} }
+    let_mock(:data)
+    let_mock(:url)
+    let_mock(:http_options)
+
+    subject { PartyResource::Connector::Base.new(:test, options) }
+
+    [:get, :post, :put, :delete].each do |verb|
+      describe ".#{verb}" do
+        it "calls httparty #{verb}" do
+          path_object = mock(:path, :url => url, :params => http_options)
+          HTTParty.should_receive(verb).with(url, http_options).and_return(data)
+          subject.send(verb, path_object).should == data
+        end
+      end
+    end
+  end
+
 end
