@@ -11,4 +11,13 @@ module PartyResource
     end
   end
 
+  def parameter_values(list)
+    list.inject({}) do |out, var|
+      begin
+        out[var] = send(var)
+      rescue
+      end
+      out
+    end
+  end
 end

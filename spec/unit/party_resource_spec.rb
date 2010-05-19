@@ -88,7 +88,15 @@ describe "PartyResource" do
       end
     end
   end
+
+  describe '.parameter_values' do
+    let_mock(:v1)
+    let_mock(:v2)
+    let_mock(:v3)
+    it 'returns internal values for requested variables' do
+      subject.stub(:v1 => v1, :v2 => v2, :v3 => v3)
+      subject.parameter_values([:v1, :v3, :vx]).should == {:v1 => v1, :v3 => v3}
+    end
+  end
 end
-
-
 
