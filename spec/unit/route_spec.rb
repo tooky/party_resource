@@ -80,5 +80,25 @@ describe PartyResource::Route do
       end
     end
 
+    context 'when returning as class with builder method' do
+      let_mock(:result_object)
+      let(:options) { { :get => path, :as => [klass, :builder] } }
+
+      it 'builds an object from the data returned' do
+        klass.should_receive(:builder).with(raw_result).and_return(result_object)
+        subject.call(object).should == result_object
+      end
+    end
+
+    context 'when returning as proc' do
+      let_mock(:result_object)
+      let(:options) { { :get => path, :as => lambda {|data| data.morph } } }
+
+      it 'builds an object from the data returned' do
+        raw_result.should_receive(:morph).and_return(result_object)
+        subject.call(object).should == result_object
+      end
+    end
+
   end
 end

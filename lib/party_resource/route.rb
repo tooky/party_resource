@@ -9,7 +9,7 @@ module PartyResource
 
     def call(context, *args)
       raise ArgumentError, "wrong number of arguments (#{args.size} for #{@options[:with].size})" unless @options[:with].size == args.size
-      return_result connector.fetch(request(context, args))
+      build_result.call connector.fetch(request(context, args))
     end
 
     def connector
@@ -43,16 +43,29 @@ module PartyResource
       options[:path] = options.delete(options[:verb])
     end
 
-    def return_result(raw_result)
-      return raw_result if wants_raw_result?
-      return_type.new(raw_result)
+    def build_result
+      return lambda {|raw_result| raw_result} if wants_raw_result?
+      return lambda {|raw_result| return_type.send(return_method,raw_result) } unless wants_object?
+      builder
     end
 
     def wants_raw_result?
       return_type == :raw
     end
 
+    def wants_object?
+      builder.is_a?(Proc)
+    end
+
     def return_type
+      builder.is_a?(Array) ? builder.first : builder
+    end
+
+    def return_method
+      builder.is_a?(Array) ? builder.last : :new
+    end
+
+    def builder
       @options[:as]
     end
   end

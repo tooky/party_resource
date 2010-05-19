@@ -32,4 +32,14 @@ describe TestClass do
     stub_request(:get, "http://fred:pass@myserver/path/save/file?data=somedata").to_return(:body => 'saved data')
     TestClass.save('somedata').should == 'saved data'
   end
+
+  it 'builds the result using the specified method' do
+    stub_request(:get, "http://fred:pass@myserver/path/delete").to_return(:body => 'deleted OK')
+    TestClass.destroy.should be_true
+  end
+
+  it 'builds the result using the specified proc' do
+    stub_request(:get, "http://fred:pass@myserver/path/foo").to_return(:body => 'foo data')
+    TestClass.foo.should == 'New foo data Improved'
+  end
 end
