@@ -3,7 +3,7 @@ require File.expand_path(File.join(__FILE__, '..', '..', 'spec_helper'))
 describe "PartyResource" do
 
   subject do
-    Class.new().extend PartyResource
+    Class.new().send(:include, PartyResource)
   end
 
   describe '.connect' do
