@@ -19,6 +19,15 @@ module PartyResource
       @args.reject{|name,value| path_params.include?(name)}
     end
 
+    def http_data(options={})
+      options = options.merge(self.params_key => self.data) unless self.data.empty?
+      options
+    end
+
+    def params_key
+      verb == :get ? :query : :body
+    end
+
     def path_params
       @path.scan(/:([\w]+)/).flatten.map{|p| p.to_sym}
     end

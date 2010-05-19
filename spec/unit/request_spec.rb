@@ -14,6 +14,10 @@ describe PartyResource::Request do
     its(:verb) { should == verb }
     its(:path) { should == path }
     its(:data) { should == {} }
+
+    it "should merge http_data with passed options" do
+      subject.http_data(:foo => :bar).should == { :foo => :bar }
+    end
   end
 
   context 'with a parameter' do
@@ -45,6 +49,30 @@ describe PartyResource::Request do
     it 'asks the context object for required data values' do
       context.should_receive(:parameter_values).with([:var])
       subject.path
+    end
+  end
+
+  context 'for a GET request' do
+    let(:verb) { :get }
+    let_mock(:args)
+    its(:http_data) { { :query => args } }
+
+    context 'with no data' do
+      let(:args) { {} }
+      its(:http_data) { { :body => args } }
+    end
+  end
+
+  [:post, :put, :delete].each do |http_verb|
+    context "for a #{http_verb} request" do
+      let(:verb) { http_verb }
+      let(:args) { {:param => value} }
+      its(:http_data) { { :body => args } }
+    end
+
+    context 'with no data' do
+      let(:args) { {} }
+      its(:http_data) { { :body => args } }
     end
   end
 
