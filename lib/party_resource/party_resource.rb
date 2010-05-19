@@ -17,6 +17,7 @@ module PartyResource
       begin
         out[var] = send(var)
       rescue
+        raise MissingParameter.new(var, self)
       end
       out
     end

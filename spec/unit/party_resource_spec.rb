@@ -96,7 +96,12 @@ describe "PartyResource" do
     let_mock(:v3)
     it 'returns internal values for requested variables' do
       subject.stub(:v1 => v1, :v2 => v2, :v3 => v3)
-      subject.parameter_values([:v1, :v3, :vx]).should == {:v1 => v1, :v3 => v3}
+      subject.parameter_values([:v1, :v3]).should == {:v1 => v1, :v3 => v3}
+    end
+
+    it 'raises a MissingParameter error' do
+      subject.stub(:v1 => v1)
+      lambda { subject.parameter_values([:v1, :vx]) }.should raise_error(PartyResource::MissingParameter)
     end
   end
 end
