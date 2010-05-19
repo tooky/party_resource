@@ -13,4 +13,14 @@ module PartyResource
     end
   end
 
+  class NoConnector < Error
+    def initialize(name)
+      @name = name
+    end
+
+    def to_s
+      "Connector '#{@name}' has not been defined"
+    end
+  end
+
 end

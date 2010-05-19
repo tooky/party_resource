@@ -7,7 +7,9 @@ module PartyResource
   module Connector
     def self.lookup(name)
       name ||= repository.default
-      repository.connectors[name]
+      connector = repository.connectors[name]
+      raise NoConnector.new(name) if connector.nil?
+      connector
     end
 
     def self.default=(name)
