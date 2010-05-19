@@ -16,6 +16,7 @@ describe "PartyResource" do
     end
 
     context 'for a class level route' do
+      let_mock(:klass)
 
       it "creates a class method matching the name" do
         subject.connect :new_resource_method
@@ -23,8 +24,8 @@ describe "PartyResource" do
       end
 
       it "creates a new route" do
-        options = {:values => other_options}
-        PartyResource::Route.should_receive(:new).with({:values => other_options, :as => subject})
+        options = {:values => other_options, :as => klass}
+        PartyResource::Route.should_receive(:new).with({:values => other_options, :as => klass})
         subject.connect :new_resource_method, options
       end
 

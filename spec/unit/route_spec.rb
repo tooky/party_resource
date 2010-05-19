@@ -63,12 +63,20 @@ describe PartyResource::Route do
       end
     end
 
-    context 'when returning as self' do
+    context 'when returning as class' do
       let_mock(:result_object)
 
       it 'builds an object from the data returned' do
         klass.should_receive(:new).with(raw_result).and_return(result_object)
         subject.call(object).should == result_object
+      end
+    end
+
+    context 'when returning as :raw' do
+      let(:options) { { :get => path, :as => :raw } }
+      it 'builds an object from the data returned' do
+        klass.should_not_receive(:new)
+        subject.call(object).should == raw_result
       end
     end
 

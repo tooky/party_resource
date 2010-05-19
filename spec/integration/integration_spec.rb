@@ -1,4 +1,5 @@
 require File.expand_path(File.join(__FILE__, '..', '..', 'spec_helper'))
+require 'fixtures/test_base_class'
 require 'fixtures/other_class'
 require 'fixtures/test_class'
 
@@ -25,5 +26,10 @@ describe TestClass do
   it 'build the requested response object' do
       stub_request(:get, "http://fred:pass@myserver/path/update/99.ext").to_return(:body => 'updated data')
       TestClass.new(:var => 99).update.should == OtherClass.new('updated data')
+  end
+
+  it 'passes the raw result back when requested' do
+    stub_request(:get, "http://fred:pass@myserver/path/save/file?data=somedata").to_return(:body => 'saved data')
+    TestClass.save('somedata').should == 'saved data'
   end
 end
