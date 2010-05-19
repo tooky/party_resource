@@ -1,4 +1,5 @@
 require File.expand_path(File.join(__FILE__, '..', '..', 'spec_helper'))
+require 'fixtures/other_class'
 require 'fixtures/test_class'
 
 describe TestClass do
@@ -17,7 +18,12 @@ describe TestClass do
   describe 'instance level call' do
     it 'gets the result' do
       stub_request(:get, "http://fred:pass@myserver/path/update/99.ext").to_return(:body => 'updated data')
-      TestClass.new(:var => 99).update.should == TestClass.new('updated data')
+      TestClass.new(:var => 99).update
     end
+  end
+
+  it 'build the requested response object' do
+      stub_request(:get, "http://fred:pass@myserver/path/update/99.ext").to_return(:body => 'updated data')
+      TestClass.new(:var => 99).update.should == OtherClass.new('updated data')
   end
 end

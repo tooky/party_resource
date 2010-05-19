@@ -4,10 +4,13 @@ class TestClass < OpenStruct
   include PartyResource
 
   connect :find, :get => '/find/:id.ext', :with => :id, :on => :class
-#     => Class method find(id)
-#     => Returns a SomethingRemote instance
-#     => Tells the connector to fetch /things/?id=<id>
 
-  connect :update, :put => '/update/:var.ext', :on => :instance
+  connect :update, :put => '/update/:var.ext', :on => :instance, :as => OtherClass
+
+  connect :save, :put => '/save/file', :with => :data, :as => :raw
+
+  def ==(other)
+    self.class == other.class && super
+  end
 end
 
