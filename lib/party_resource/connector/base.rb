@@ -11,15 +11,19 @@ module PartyResource
       end
 
       def fetch(request)
-        HTTParty.get(request.path, data(request))
+        HTTParty.send(request.verb, request.path, data(request))
       end
 
     private
 
       def data(request)
         data = options
-        data = data.merge(:query => request.data) unless request.data.empty?
+        data = data.merge(params_key(request.verb) => request.data) unless request.data.empty?
         data
+      end
+
+      def params_key(verb)
+        verb == :get ? :query : :body
       end
 
       def options=(options)

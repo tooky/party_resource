@@ -11,7 +11,7 @@ class TestClass < TestBaseClass
 
   connect :destroy, :delete => '/delete', :as => [OtherClass, :make_boolean]
 
-  connect :foo, :get => '/foo', :as => lambda {|data| "New #{data} Improved" }
+  connect :foo, :get => '/foo', :with => :value, :as => lambda {|data| "New #{data} Improved" }
 
 end
 

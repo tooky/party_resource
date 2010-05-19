@@ -51,22 +51,42 @@ describe PartyResource::Connector::Base do
     let(:options) { {:base_uri => 'http://myserver.test/path'} }
     let_mock(:data, :empty? => false)
     let_mock(:path)
-    let(:verb) { :get }
-    let(:request) { mock(:request, :path => path, :verb => verb, :data => data) }
     let_mock(:return_data)
+    let(:request) { mock(:request, :path => path, :verb => verb, :data => data) }
 
     subject { PartyResource::Connector::Base.new(:test, options) }
 
-    it "fetches the request using HTTParty" do
-      HTTParty.should_receive(verb).with(path, options.merge(:query => data)).and_return(return_data)
-      subject.fetch(request).should == return_data
+    [:put, :post, :delete].each do |http_verb|
+      context "for #{http_verb} requests" do
+        let(:verb) { http_verb }
+        it "fetches the request using HTTParty" do
+          HTTParty.should_receive(verb).with(path, options.merge(:body => data)).and_return(return_data)
+          subject.fetch(request).should == return_data
+        end
+
+        context 'with no data' do
+          let(:data) { {} }
+          it 'does not pass any data' do
+            HTTParty.should_receive(verb).with(anything, options)
+            subject.fetch(request)
+          end
+        end
+      end
     end
 
-    context 'with no data' do
-      let(:data) { {} }
-      it 'does not pass any data' do
-        HTTParty.should_receive(verb).with(anything, options)
+    context 'for get requests' do
+      let(:verb) { :get }
+      it 'passes the parameters in the query' do
+        HTTParty.should_receive(verb).with(path, options.merge(:query => data))
         subject.fetch(request)
+      end
+
+      context 'with no data' do
+        let(:data) { {} }
+        it 'does not pass any data' do
+          HTTParty.should_receive(verb).with(anything, options)
+          subject.fetch(request)
+        end
       end
     end
   end

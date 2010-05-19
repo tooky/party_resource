@@ -18,28 +18,28 @@ describe TestClass do
 
   describe 'instance level call' do
     it 'gets the result' do
-      stub_request(:get, "http://fred:pass@myserver/path/update/99.ext").to_return(:body => 'updated data')
+      stub_request(:put, "http://fred:pass@myserver/path/update/99.ext").to_return(:body => 'updated data')
       TestClass.new(:var => 99).update
     end
   end
 
   it 'build the requested response object' do
-      stub_request(:get, "http://fred:pass@myserver/path/update/99.ext").to_return(:body => 'updated data')
+      stub_request(:put, "http://fred:pass@myserver/path/update/99.ext").to_return(:body => 'updated data')
       TestClass.new(:var => 99).update.should == OtherClass.new('updated data')
   end
 
   it 'passes the raw result back when requested' do
-    stub_request(:get, "http://fred:pass@myserver/path/save/file?data=somedata").to_return(:body => 'saved data')
+    stub_request(:post, "http://fred:pass@myserver/path/save/file").with(:body => "data=somedata").to_return(:body => 'saved data')
     TestClass.save('somedata').should == 'saved data'
   end
 
   it 'builds the result using the specified method' do
-    stub_request(:get, "http://fred:pass@myserver/path/delete").to_return(:body => 'deleted OK')
+    stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:body => 'deleted OK')
     TestClass.destroy.should be_true
   end
 
   it 'builds the result using the specified proc' do
-    stub_request(:get, "http://fred:pass@myserver/path/foo").to_return(:body => 'foo data')
-    TestClass.foo.should == 'New foo data Improved'
+    stub_request(:get, "http://fred:pass@myserver/path/foo?value=908").to_return(:body => 'foo data')
+    TestClass.foo(908).should == 'New foo data Improved'
   end
 end
