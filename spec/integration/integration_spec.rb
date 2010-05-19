@@ -8,9 +8,9 @@ describe TestClass do
       lambda { TestClass.find }.should raise_error(ArgumentError)
     end
 
-    xit 'finds an object' do
-      stub_request(:get, "http://fred:pass@myserver/path/things/99.ext")
-      TestClass.find(99).should == TestClass.new(:some => :data)
+    it 'finds an object' do
+      stub_request(:get, "http://fred:pass@myserver/path/things/99.ext").to_return(:body => 'some data')
+      TestClass.find(99).should == TestClass.new('some data')
     end
   end
 end

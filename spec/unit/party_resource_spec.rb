@@ -9,6 +9,7 @@ describe "PartyResource" do
   describe '.connect' do
 
     let(:route) { mock(:route) }
+    let_mock(:other_options)
 
     before do
       PartyResource::Route.stub(:new => route)
@@ -22,8 +23,8 @@ describe "PartyResource" do
       end
 
       it "creates a new route" do
-        options = {:values => mock(:options)}
-        PartyResource::Route.should_receive(:new).with(options)
+        options = {:values => other_options}
+        PartyResource::Route.should_receive(:new).with({:values => other_options, :as => subject})
         subject.connect :new_resource_method, options
       end
 
@@ -49,8 +50,8 @@ describe "PartyResource" do
       end
 
       it "creates a new route" do
-        options = {:on => :instance, :others => mock(:options)}
-        PartyResource::Route.should_receive(:new).with(options)
+        options = {:on => :instance, :others => other_options}
+        PartyResource::Route.should_receive(:new).with({:others => other_options, :as => subject})
         subject.connect :new_resource_method, options
       end
 

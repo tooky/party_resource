@@ -11,8 +11,8 @@ module PartyResource
       raise ArgumentError, "wrong number of arguments (#{args.size} for #{@options[:with].size})" unless @options[:with].size == args.size
       args = Hash[*@options[:with].zip(args).flatten]
       path = Request.new(@options[:verb], @options[:path], context, args)
-      connector.fetch(path)
-      :foo
+      raw_result = connector.fetch(path)
+      @options[:as].new(raw_result)
     end
 
     def connector

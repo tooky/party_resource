@@ -4,6 +4,7 @@ module PartyResource
 
   def connect(name, options={})
     level = options.delete(:on)
+    options = {:as => self}.merge(options)
     route = Route.new(options)
 
     define_method_on(level, name) do |*args|
