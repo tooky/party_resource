@@ -14,6 +14,6 @@ class Property
   def value_from(hash)
     from.inject(hash) do |value, name|
       value[name] unless value.nil?
-    end
+    end || hash[name]
   end
 end

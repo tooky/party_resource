@@ -128,6 +128,12 @@ describe "PartyResource" do
       object.send(:populate_properties, :parent => { :input_name => v1 }, :input_name => v2)
       object.name.should == v1
     end
+
+    it 'falls back to populating based on the property name if from is not found' do
+      subject.property :name, :from => :input_name
+      object.send(:populate_properties, :name => v2)
+      object.name.should == v2
+    end
   end
 
 end

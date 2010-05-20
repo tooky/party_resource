@@ -65,4 +65,9 @@ describe TestClass do
     result.nested_value.should == 'value'
   end
 
+  it 'falls back to populating based on the property name if from is not found' do
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value:"value"}')
+    result = TestClass.fetch_json
+    result.value.should == 'value'
+  end
 end
