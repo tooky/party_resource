@@ -122,6 +122,12 @@ describe "PartyResource" do
       object.send(:populate_properties, :input_name => v1, :name => v2)
       object.name.should == v1
     end
+
+    it 'reaches inside nested values' do
+      subject.property :name, :from => [:parent, :input_name]
+      object.send(:populate_properties, :parent => { :input_name => v1 }, :input_name => v2)
+      object.name.should == v1
+    end
   end
 
 end

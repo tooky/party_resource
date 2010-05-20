@@ -19,6 +19,8 @@ class TestClass < TestBaseClass
 
   property :value2, :value3
 
+  property :nested_value, :from => [:block, :var]
+
   def self.from_json(args)
     obj = self.new
     obj.send(:populate_properties, args)

@@ -59,4 +59,10 @@ describe TestClass do
     result.value.should == 'value'
   end
 
+  it 'populates nested values' do
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{block:{var:"value"}}')
+    result = TestClass.fetch_json
+    result.nested_value.should == 'value'
+  end
+
 end
