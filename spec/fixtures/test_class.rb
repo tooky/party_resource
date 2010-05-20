@@ -21,6 +21,10 @@ class TestClass < TestBaseClass
 
   property :nested_value, :from => [:block, :var]
 
+  property :other, :as => OtherClass
+
+  property :processed, :as => lambda { |data| "Processed: #{data}" }
+
   def self.from_json(args)
     obj = self.new
     obj.send(:populate_properties, args)

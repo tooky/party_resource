@@ -70,4 +70,16 @@ describe TestClass do
     result = TestClass.fetch_json
     result.value.should == 'value'
   end
+
+  it 'populates a property as another class' do
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{other: "value"}')
+    result = TestClass.fetch_json
+    result.other.should == OtherClass.new('value')
+  end
+
+  it 'populates a property with a proc' do
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{processed: "value"}')
+    result = TestClass.fetch_json
+    result.processed.should == "Processed: value"
+  end
 end
