@@ -13,5 +13,9 @@ class TestClass < TestBaseClass
 
   connect :foo, :get => '/foo', :with => :value, :as => lambda {|data| "New #{data} Improved" }
 
+  property :value, :from => :input_name
+
+  property :value2, :value3
+
 end
 

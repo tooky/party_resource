@@ -105,5 +105,20 @@ describe "PartyResource" do
       lambda { subject.parameter_values([:v1, :vx]) }.should raise_error(PartyResource::MissingParameter)
     end
   end
+
+  describe '.property' do
+    let_mock(:name)
+    it 'creates an attr reader for the property' do
+      subject.should_receive(:attr_reader).with(name)
+      subject.property name
+    end
+
+    let_mock(:name2)
+    it 'creates an attr reader for the property' do
+      subject.should_receive(:attr_reader).with(name)
+      subject.should_receive(:attr_reader).with(name2)
+      subject.property name, name2
+    end
+  end
 end
 

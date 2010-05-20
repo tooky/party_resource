@@ -12,6 +12,13 @@ module PartyResource
         route.call(self, *args)
       end
     end
+
+    def property(*names)
+      options = names.pop if names.last.is_a?(Hash)
+      names.each do |name|
+        attr_reader name
+      end
+    end
   end
 
   module ParameterValues

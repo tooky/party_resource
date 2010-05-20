@@ -42,4 +42,15 @@ describe TestClass do
     stub_request(:get, "http://fred:pass@myserver/path/foo?value=908").to_return(:body => 'foo data')
     TestClass.foo(908).should == 'New foo data Improved'
   end
+
+
+
+  it 'creates property attributes' do
+    TestClass.new(:foo).should be_respond_to(:value)
+  end
+
+  it 'creates multiple property attributes' do
+    TestClass.new(:foo).should be_respond_to(:value2)
+    TestClass.new(:foo).should be_respond_to(:value3)
+  end
 end
