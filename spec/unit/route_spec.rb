@@ -8,7 +8,7 @@ describe PartyResource::Route do
   let_mock(:object)
   let_mock(:raw_result)
   let(:connector) { mock(:connector, :fetch => raw_result) }
-  let_mock(:klass, :new => nil)
+  let(:klass) { Class.new {def initialize(data); end} }
   let(:options) { { :get => path, :as => klass } }
 
   before do

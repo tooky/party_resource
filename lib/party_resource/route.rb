@@ -5,11 +5,12 @@ module PartyResource
 
     def initialize(options = {})
       @options = transform_options(options)
+      @builder = Builder.new(@options[:as])
     end
 
     def call(context, *args)
       raise ArgumentError, "wrong number of arguments (#{args.size} for #{@options[:with].size})" unless @options[:with].size == args.size
-      build_result.call connector.fetch(request(context, args))
+      @builder.call connector.fetch(request(context, args))
     end
 
     def connector
@@ -43,30 +44,38 @@ module PartyResource
       options[:path] = options.delete(options[:verb])
     end
 
-    def build_result
-      return lambda {|raw_result| raw_result} if wants_raw_result?
-      return lambda {|raw_result| return_type.send(return_method,raw_result) } unless wants_object?
-      builder
-    end
 
-    def wants_raw_result?
-      return_type == :raw
-    end
+    class Builder
+      def initialize(build_options)
+        @build_options = build_options
+      end
 
-    def wants_object?
-      builder.is_a?(Proc)
-    end
+      def call(raw_result)
+        builder.call(raw_result)
+      end
 
-    def return_type
-      builder.is_a?(Array) ? builder.first : builder
-    end
+      def builder
+        return lambda {|raw_result| raw_result} if wants_raw_result?
+        return lambda {|raw_result| return_type.send(return_method,raw_result) } if wants_object?
+        @build_options
+      end
 
-    def return_method
-      builder.is_a?(Array) ? builder.last : :new
-    end
+      def wants_raw_result?
+        return_type == :raw
+      end
 
-    def builder
-      @options[:as]
+      def wants_object?
+        @build_options.is_a?(Array) || @build_options.is_a?(Class)
+      end
+
+      def return_type
+        @build_options.is_a?(Array) ? @build_options.first : @build_options
+      end
+
+      def return_method
+        @build_options.is_a?(Array) ? @build_options.last : :new
+      end
+
     end
   end
 end
