@@ -1,16 +1,18 @@
+require 'party_resource/buildable'
 module PartyResource
+
   class Route
+    include Buildable
 
     VERBS = [:get, :post, :put, :delete]
 
     def initialize(options = {})
       @options = transform_options(options)
-      @builder = Builder.new(@options[:as])
     end
 
     def call(context, *args)
       raise ArgumentError, "wrong number of arguments (#{args.size} for #{@options[:with].size})" unless @options[:with].size == args.size
-      @builder.call connector.fetch(request(context, args))
+      builder.call connector.fetch(request(context, args))
     end
 
     def connector
@@ -44,39 +46,6 @@ module PartyResource
       options[:path] = options.delete(options[:verb])
     end
 
-
-    class Builder
-      def initialize(build_options)
-        @build_options = build_options
-      end
-
-      def call(raw_result)
-        builder.call(raw_result)
-      end
-
-      def builder
-        return lambda {|raw_result| raw_result} if wants_raw_result?
-        return lambda {|raw_result| return_type.send(return_method,raw_result) } if wants_object?
-        @build_options
-      end
-
-      def wants_raw_result?
-        return_type == :raw
-      end
-
-      def wants_object?
-        @build_options.is_a?(Array) || @build_options.is_a?(Class)
-      end
-
-      def return_type
-        @build_options.is_a?(Array) ? @build_options.first : @build_options
-      end
-
-      def return_method
-        @build_options.is_a?(Array) ? @build_options.last : :new
-      end
-
-    end
   end
 end
 
