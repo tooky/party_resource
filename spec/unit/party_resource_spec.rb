@@ -116,6 +116,12 @@ describe "PartyResource" do
       object.name.should == v1
       object.name2.should == v2
     end
+
+    it 'renames properties from passed data' do
+      subject.property :name, :from => :input_name
+      object.send(:populate_properties, :input_name => v1, :name => v2)
+      object.name.should == v1
+    end
   end
 
 end

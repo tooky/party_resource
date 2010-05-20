@@ -21,7 +21,7 @@ module PartyResource
       names.each do |name|
         name = name.to_sym
         attr_reader name
-        property_list[name] = options
+        property_list[name] = options || {}
       end
     end
 
@@ -48,7 +48,7 @@ module PartyResource
   def populate_properties(hash)
     hash = hash.with_indifferent_access
     self.class.send(:property_list).each do |name, options|
-      instance_variable_set("@#{name}", hash[name])
+      instance_variable_set("@#{name}", hash[options[:from] || name])
     end
   end
 

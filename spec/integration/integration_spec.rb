@@ -46,11 +46,17 @@ describe TestClass do
   end
 
   it 'populates result values' do
-    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{input_name:"value", value2:"value2", value4:"ignored"}')
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value2:"value2", value4:"ignored"}')
     result = TestClass.fetch_json
     result.value2.should == 'value2'
     result.value3.should == nil
     result.should_not be_respond_to(:value4)
+  end
+
+  it 'populates renamed values' do
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{input_name:"value"}')
+    result = TestClass.fetch_json
+    result.value.should == 'value'
   end
 
 end
