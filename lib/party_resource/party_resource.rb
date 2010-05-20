@@ -1,3 +1,6 @@
+require 'active_support/core_ext/hash/indifferent_access'
+Hash.send(:include, ActiveSupport::CoreExtensions::Hash::IndifferentAccess) unless Hash.method_defined?(:with_indifferent_access)
+
 module PartyResource
 
   module ClassMethods

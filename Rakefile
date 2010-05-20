@@ -10,6 +10,7 @@ begin
     gem.homepage = "http://github.com/tooky/party_resource"
     gem.authors = ["Tristan Harris", "Steve Tooke"]
     gem.add_runtime_dependency "httparty", ">= 0.5.2"
+    gem.add_runtime_dependency "activesupport", ">= 2.3.5"
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "yard", ">= 0"
     gem.add_development_dependency "webmock", ">= 0"
