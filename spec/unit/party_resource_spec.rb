@@ -5,6 +5,7 @@ describe "PartyResource" do
   subject do
     Class.new().send(:include, PartyResource)
   end
+  let(:object) { subject.new }
 
   describe '.connect' do
 
@@ -106,19 +107,16 @@ describe "PartyResource" do
     end
   end
 
-  describe '.property' do
-    let_mock(:name)
-    it 'creates an attr reader for the property' do
-      subject.should_receive(:attr_reader).with(name)
-      subject.property name
-    end
-
-    let_mock(:name2)
-    it 'creates an attr reader for the property' do
-      subject.should_receive(:attr_reader).with(name)
-      subject.should_receive(:attr_reader).with(name2)
-      subject.property name, name2
+  describe 'properties' do
+    let_mock(:v1)
+    let_mock(:v2)
+    it 'populates property values from hash' do
+      subject.property :name, :name2
+      object.send(:populate_properties, :name => v1, :name2 => v2)
+      object.name.should == v1
+      object.name2.should == v2
     end
   end
+
 end
 

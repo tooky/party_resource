@@ -13,9 +13,17 @@ class TestClass < TestBaseClass
 
   connect :foo, :get => '/foo', :with => :value, :as => lambda {|data| "New #{data} Improved" }
 
+  connect :fetch_json, :get => '/big_data', :as => [TestClass, :from_json]
+
   property :value, :from => :input_name
 
   property :value2, :value3
+
+  def self.from_json(args)
+    obj = self.new
+    obj.send(:populate_properties, args)
+    obj
+  end
 
 end
 

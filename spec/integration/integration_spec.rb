@@ -5,6 +5,8 @@ require 'fixtures/test_class'
 
 describe TestClass do
 
+  let(:object) {TestClass.new(:foo)}
+
   describe 'class level call' do
     it 'raises an argument error when called with the wrong number of arguments' do
       lambda { TestClass.find }.should raise_error(ArgumentError)
@@ -43,14 +45,12 @@ describe TestClass do
     TestClass.foo(908).should == 'New foo data Improved'
   end
 
-
-
-  it 'creates property attributes' do
-    TestClass.new(:foo).should be_respond_to(:value)
+  it 'populates result values' do
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{input_name:"value", value2:"value2", value4:"ignored"}')
+    result = TestClass.fetch_json
+    result.value2.should == 'value2'
+    result.value3.should == nil
+    result.should_not be_respond_to(:value4)
   end
 
-  it 'creates multiple property attributes' do
-    TestClass.new(:foo).should be_respond_to(:value2)
-    TestClass.new(:foo).should be_respond_to(:value3)
-  end
 end

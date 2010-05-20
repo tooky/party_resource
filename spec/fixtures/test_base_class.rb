@@ -1,7 +1,7 @@
 class TestBaseClass
   attr :args
 
-  def initialize(args)
+  def initialize(args={})
     @args = args
   end
 

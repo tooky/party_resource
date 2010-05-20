@@ -19,13 +19,19 @@ module PartyResource
     def property(*names)
       options = names.pop if names.last.is_a?(Hash)
       names.each do |name|
+        name = name.to_sym
         attr_reader name
+        property_list[name] = options
       end
+    end
+
+    private
+    def property_list
+      @property_list ||= {}
     end
   end
 
   module ParameterValues
-
     def parameter_values(list)
       list.inject({}) do |out, var|
         begin
@@ -36,7 +42,14 @@ module PartyResource
         out
       end
     end
+  end
 
+  private
+  def populate_properties(hash)
+    hash = hash.with_indifferent_access
+    self.class.send(:property_list).each do |name, options|
+      instance_variable_set("@#{name}", hash[name])
+    end
   end
 
   def self.included(klass)
