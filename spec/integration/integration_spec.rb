@@ -102,5 +102,20 @@ describe TestClass do
       result = TestClass.fetch_json
       result.processed.should == ['Processed: 1','Processed: 2','Processed: 3','Processed: 4']
     end
+
+    context 'and inherited class' do
+      it 'self refers to the child class' do
+        stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value2:"value2", child_property:"child"}')
+        result = InheritedTestClass.fetch_json
+        result.should be_a(InheritedTestClass)
+      end
+
+      it 'all local and inherited properties are available' do
+        stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value2:"value2", child_property:"child"}')
+        result = InheritedTestClass.fetch_json
+        result.child_property.should == 'child'
+        result.value2.should == 'value2'
+      end
+    end
   end
 end

@@ -13,7 +13,7 @@ class TestClass < TestBaseClass
 
   connect :foo, :get => '/foo', :with => :value, :as => lambda {|data| "New #{data} Improved" }
 
-  connect :fetch_json, :get => '/big_data', :as => [TestClass, :from_json]
+  connect :fetch_json, :get => '/big_data', :as => [:self, :from_json]
 
   property :value, :from => :input_name
 
@@ -33,3 +33,7 @@ class TestClass < TestBaseClass
 
 end
 
+
+class InheritedTestClass < TestClass
+  property :child_property
+end

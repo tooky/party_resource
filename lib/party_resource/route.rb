@@ -12,7 +12,7 @@ module PartyResource
 
     def call(context, *args)
       raise ArgumentError, "wrong number of arguments (#{args.size} for #{@options[:with].size})" unless @options[:with].size == args.size
-      builder.call connector.fetch(request(context, args))
+      builder.call(connector.fetch(request(context, args)), context)
     end
 
     def connector

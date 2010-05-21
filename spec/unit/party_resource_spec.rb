@@ -53,7 +53,7 @@ describe "PartyResource" do
 
       it "creates a new route" do
         options = {:on => :instance, :others => other_options}
-        PartyResource::Route.should_receive(:new).with({:others => other_options, :as => subject})
+        PartyResource::Route.should_receive(:new).with({:others => other_options, :as => :self})
         subject.connect :new_resource_method, options
       end
 

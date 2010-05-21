@@ -10,8 +10,8 @@ module PartyResource
       @options = {:as => :raw}.merge(options || {})
     end
 
-    def value_from(hash)
-      builder.call retrieve_value(hash)
+    def value_from(hash, context)
+      builder.call retrieve_value(hash), context
     end
 
     def has_value_in?(hash)

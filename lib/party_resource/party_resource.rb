@@ -8,7 +8,7 @@ module PartyResource
 
     def connect(name, options={})
       level = options.delete(:on)
-      options = {:as => self}.merge(options)
+      options = {:as => :self}.merge(options)
       route = Route.new(options)
 
       define_method_on(level, name) do |*args|
@@ -23,13 +23,19 @@ module PartyResource
         define_method name do
           get_property(name)
         end
-        property_list << Property.new(name, options)
+        @property_list ||= []
+        @property_list << Property.new(name, options)
       end
     end
 
     private
     def property_list
       @property_list ||= []
+      if superclass.include?(PartyResource)
+        @property_list + superclass.send(:property_list)
+      else
+        @property_list
+      end
     end
   end
 
@@ -50,7 +56,7 @@ module PartyResource
   def populate_properties(hash)
     hash = hash.with_indifferent_access
     self.class.send(:property_list).each do |property|
-      instance_variable_set("@#{property.name}", property.value_from(hash)) if property.has_value_in?(hash)
+      instance_variable_set("@#{property.name}", property.value_from(hash, self)) if property.has_value_in?(hash)
     end
   end
 
