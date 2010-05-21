@@ -24,7 +24,7 @@ describe PartyResource::Route do
 
         it "performs a #{verb} request to the path with the connector" do
           request = mock(:request)
-          PartyResource::Request.should_receive(:new).with(verb, path, object, anything).and_return(request)
+          PartyResource::Request.should_receive(:new).with(verb, path, object, anything, anything).and_return(request)
           connector.should_receive(:fetch).with(request)
           subject.call(object)
         end
@@ -43,7 +43,7 @@ describe PartyResource::Route do
       let(:options) { { :get => path, :as => klass } }
 
       it "builds the request path" do
-        PartyResource::Request.should_receive(:new).with(:get, path, object, {})
+        PartyResource::Request.should_receive(:new).with(:get, path, object, {}, anything)
         subject.call(object)
       end
 
@@ -53,7 +53,7 @@ describe PartyResource::Route do
       let(:options) { { :get => path, :with => [:a, :b, :c], :as => klass } }
 
       it "builds the request path" do
-        PartyResource::Request.should_receive(:new).with(:get, path, object, {:a => 1, :b => 2, :c => 3})
+        PartyResource::Request.should_receive(:new).with(:get, path, object, {:a => 1, :b => 2, :c => 3}, anything)
         subject.call(object, 1, 2, 3)
       end
 
@@ -105,6 +105,12 @@ describe PartyResource::Route do
       let(:options) { { :get => path, :as => lambda {|data| "X#{data}" } } }
       it 'builds each value individually' do
         subject.call(object).should == %w{ X1 X2 }
+      end
+    end
+
+    context 'with an extra params hash' do
+      it '' do
+        lambda { subject.call(object, {:params => :data}) }.should_not raise_error
       end
     end
 

@@ -1,11 +1,12 @@
 module PartyResource
   class Request
     attr_reader :verb
-    def initialize(verb, path, context, args)
+    def initialize(verb, path, context, args, params)
       @verb = verb
       @path = path
       @args = args
       @context = context
+      @params = params || {}
     end
 
     def path
@@ -16,7 +17,7 @@ module PartyResource
     end
 
     def data
-      @args.reject{|name,value| path_params.include?(name)}
+      @params.merge(@args).reject{|name,value| path_params.include?(name)}
     end
 
     def http_data(options={})

@@ -16,6 +16,11 @@ describe TestClass do
       stub_request(:get, "http://fred:pass@myserver/path/find/99.ext").to_return(:body => 'some data')
       TestClass.find(99).should == TestClass.new('some data')
     end
+
+    it 'finds an object with extra options' do
+      stub_request(:get, "http://fred:pass@myserver/path/find/99.ext?extra=options").to_return(:body => 'some data')
+      TestClass.find(99, :extra => 'options').should == TestClass.new('some data')
+    end
   end
 
   describe 'instance level call' do

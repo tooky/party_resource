@@ -2,10 +2,11 @@ require File.expand_path(File.join(__FILE__, '..', '..', 'spec_helper'))
 
 describe PartyResource::Request do
 
-  subject { PartyResource::Request.new(verb, path, context, args) }
+  subject { PartyResource::Request.new(verb, path, context, args, params) }
   let_mock(:context, :parameter_values => {})
   let_mock(:verb)
   let_mock(:value)
+  let(:params) { {} }
 
   context 'with static path' do
     let(:path) { 'mypath/file.json' }
@@ -49,6 +50,20 @@ describe PartyResource::Request do
     it 'asks the context object for required data values' do
       context.should_receive(:parameter_values).with([:var])
       subject.path
+    end
+  end
+
+  context 'with extra parameters' do
+    let(:path) { '/path/:id' }
+    let_mock(:p1)
+    let_mock(:p2)
+    let_mock(:a1)
+    let_mock(:a2)
+    let(:params) { {:id => mock(:id2), :param => p1, :param2 => p2} }
+    let(:args) { {:id => 'THE_ID', :param => a1, :arg2 => a2} }
+    it 'merges them into the request data' do
+      subject.path.should == '/path/THE_ID'
+      subject.data.should == {:param => a1, :param2 => p2, :arg2 => a2}
     end
   end
 

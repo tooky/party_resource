@@ -11,8 +11,9 @@ module PartyResource
     end
 
     def call(context, *args)
-      raise ArgumentError, "wrong number of arguments (#{args.size} for #{@options[:with].size})" unless @options[:with].size == args.size
-      builder.call(connector.fetch(request(context, args)), context)
+      options = args.pop if args.last.is_a?(Hash) && args.size == expected_args.size + 1
+      raise ArgumentError, "wrong number of arguments (#{args.size} for #{expected_args.size})" unless expected_args.size == args.size
+      builder.call(connector.fetch(request(context, args, options)), context)
     end
 
     def connector
@@ -20,12 +21,12 @@ module PartyResource
     end
 
     private
-    def request(context, args)
-      Request.new(@options[:verb], @options[:path], context, args_hash(args))
+    def request(context, args, params)
+      Request.new(@options[:verb], @options[:path], context, args_hash(args), params)
     end
 
     def args_hash(args)
-      Hash[*@options[:with].zip(args).flatten]
+      Hash[*expected_args.zip(args).flatten]
     end
 
     def transform_options(options)
@@ -44,6 +45,10 @@ module PartyResource
       raise ArgumentError, "Must define only one verb (#{verbs.inspect} defined)" unless verbs.size == 1
       options[:verb] = verbs.first
       options[:path] = options.delete(options[:verb])
+    end
+
+    def expected_args
+      @options[:with]
     end
 
   end
