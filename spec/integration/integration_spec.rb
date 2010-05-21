@@ -45,6 +45,11 @@ describe TestClass do
     TestClass.foo(908).should == 'New foo data Improved'
   end
 
+  it 'builds each value in an array individually' do
+    stub_request(:get, "http://fred:pass@myserver/path/foo?value=908").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '[foo,data]')
+    TestClass.foo(908).should == ['New foo Improved', 'New data Improved']
+  end
+
   it 'populates result values' do
     stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value2:"value2", value4:"ignored"}')
     result = TestClass.fetch_json
@@ -87,5 +92,11 @@ describe TestClass do
     stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{processed: null}')
     result = TestClass.fetch_json
     result.processed.should == nil
+  end
+
+  it 'builds each value when populating an array' do
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{processed: [1,2,3,4]}')
+    result = TestClass.fetch_json
+    result.processed.should == ['Processed: 1','Processed: 2','Processed: 3','Processed: 4']
   end
 end

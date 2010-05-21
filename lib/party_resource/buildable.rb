@@ -12,6 +12,7 @@ module PartyResource
 
       def call(raw_result)
         return nil if raw_result.nil?
+        return raw_result.map{ |value| builder.call(value) } if raw_result.is_a?(Array)
         builder.call(raw_result)
       end
 

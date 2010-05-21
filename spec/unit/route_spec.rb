@@ -100,5 +100,13 @@ describe PartyResource::Route do
       end
     end
 
+    context 'when returning an array' do
+      let(:raw_result) { [1, 2] }
+      let(:options) { { :get => path, :as => lambda {|data| "X#{data}" } } }
+      it 'builds each value individually' do
+        subject.call(object).should == %w{ X1 X2 }
+      end
+    end
+
   end
 end
