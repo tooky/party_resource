@@ -20,7 +20,9 @@ module PartyResource
       options = names.pop if names.last.is_a?(Hash)
       names.each do |name|
         name = name.to_sym
-        attr_reader name
+        define_method name do
+          get_property(name)
+        end
         property_list << Property.new(name, options)
       end
     end
@@ -56,5 +58,9 @@ module PartyResource
     klass.extend(ClassMethods)
     klass.extend(ParameterValues)
     klass.send(:include, ParameterValues)
+  end
+
+  def get_property(name)
+    instance_variable_get("@#{name}")
   end
 end
