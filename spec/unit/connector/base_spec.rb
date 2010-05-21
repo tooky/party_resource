@@ -52,7 +52,7 @@ describe PartyResource::Connector::Base do
     let(:options) { {:base_uri => 'http://myserver.test/path'} }
     let_mock(:data, :empty? => false)
     let_mock(:path)
-    let_mock(:return_data)
+    let_mock(:return_data, :code => 200)
     let(:request) { mock(:request, :path => path, :verb => verb, :http_data => data) }
 
     subject { PartyResource::Connector::Base.new(:test, options) }
@@ -65,6 +65,16 @@ describe PartyResource::Connector::Base do
           subject.fetch(request).should == return_data
         end
 
+      end
+    end
+
+    context 'error cases' do
+      let(:request) { mock(:request, :path => mock(:path), :verb => :get, :http_data => mock(:data)) }
+
+      it 'raises an exception' do
+        return_data = mock(:data, :code => 404)
+        HTTParty.should_receive(:get).and_return(return_data)
+        lambda{ subject.fetch(request) }.should raise_error(PartyResource::ConnectionError)
       end
     end
 

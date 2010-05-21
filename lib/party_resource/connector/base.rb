@@ -11,7 +11,11 @@ module PartyResource
       end
 
       def fetch(request)
-        HTTParty.send(request.verb, request.path, request.http_data(options))
+        response = HTTParty.send(request.verb, request.path, request.http_data(options))
+        unless (200..399).include? response.code
+          raise PartyResource::ConnectionError.build(response)
+        end
+        response
       end
 
     private

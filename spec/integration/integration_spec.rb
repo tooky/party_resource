@@ -50,6 +50,29 @@ describe TestClass do
       stub_request(:get, "http://fred:pass@myserver/path/foo?value=908").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '[foo,data]')
       TestClass.foo(908).should == ['New foo Improved', 'New data Improved']
     end
+
+    context 'error cases' do
+      it 'raises ResourceNotFound' do
+        stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 404)
+        lambda { TestClass.destroy }.should raise_error(PartyResource::ResourceNotFound)
+      end
+
+      it 'raises ResourceInvalid' do
+        stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 422)
+        lambda { TestClass.destroy }.should raise_error(PartyResource::ResourceInvalid)
+      end
+
+      it 'raises ClientError' do
+        stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 405)
+        lambda { TestClass.destroy }.should raise_error(PartyResource::ClientError)
+      end
+
+      it 'raises ServerError' do
+        stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 501)
+        lambda { TestClass.destroy }.should raise_error(PartyResource::ServerError)
+      end
+
+    end
   end
 
   describe 'populating properties' do

@@ -23,4 +23,35 @@ module PartyResource
     end
   end
 
+  class ConnectionError < Error;
+    attr_reader :data
+
+    def self.build(data=nil)
+      klass = case data.code
+        when 404: ResourceNotFound
+        when 422: ResourceInvalid
+        when 400..499: ClientError
+        when 500..599: ServerError
+        else self
+      end
+      klass.new(data)
+    end
+
+    def initialize(data=nil)
+      super()
+      @data = data
+    end
+
+    def to_s
+      code = ''
+      code = "#{data.code} " if data.respond_to?(:code)
+      "A #{code}connection error occured"
+    end
+  end
+
+  ClientError = Class.new(ConnectionError) # 4xx
+  ServerError = Class.new(ConnectionError) # 5xx
+
+  ResourceNotFound = Class.new(ClientError) # 404
+  ResourceInvalid = Class.new(ClientError) # 422
 end
