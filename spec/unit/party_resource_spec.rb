@@ -142,6 +142,38 @@ describe "PartyResource" do
       object.send(:populate_properties, :name => nil)
       object.name.should == nil
     end
+
+    it "doesn't set properties to nil if they aren't in the data hash" do
+      subject.property :name, :name2
+      object.send(:populate_properties, :name => v1)
+      object.name.should == v1
+      object.name2.should == nil
+      object.send(:populate_properties,:name2 => v2)
+      object.name.should == v1
+      object.name2.should == v2
+    end
+  end
+
+  describe '#properties_equal?' do
+    let_mock(:v1)
+    let(:object2) { subject.new }
+
+    before do
+      subject.property :name, :name2
+      object.send(:populate_properties, :name => v1, :name2 => nil)
+    end
+
+    it 'returns true if all properties are equal' do
+      subject.property :name, :name2
+      object.send(:populate_properties, :name => v1, :name2 => nil)
+      object2.send(:populate_properties, :name => v1)
+      object.should be_properties_equal(object2)
+    end
+
+    it 'returns true if all properties are equal' do
+      object2.send(:populate_properties, :name => v1, :name2 => v1)
+      object.should_not be_properties_equal(object2)
+    end
   end
 
 end
