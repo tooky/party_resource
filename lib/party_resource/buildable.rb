@@ -11,6 +11,7 @@ module PartyResource
       end
 
       def call(raw_result)
+        return nil if raw_result.nil?
         builder.call(raw_result)
       end
 

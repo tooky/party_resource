@@ -82,4 +82,10 @@ describe TestClass do
     result = TestClass.fetch_json
     result.processed.should == "Processed: value"
   end
+
+  it 'does not build null data' do
+    stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{processed: null}')
+    result = TestClass.fetch_json
+    result.processed.should == nil
+  end
 end

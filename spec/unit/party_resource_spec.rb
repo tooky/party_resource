@@ -134,6 +134,14 @@ describe "PartyResource" do
       object.send(:populate_properties, :name => v2)
       object.name.should == v2
     end
+
+    it 'does not try to build nil values' do
+      klass = Class.new
+      subject.property :name, :as => klass
+      klass.should_not_receive(:new)
+      object.send(:populate_properties, :name => nil)
+      object.name.should == nil
+    end
   end
 
 end
