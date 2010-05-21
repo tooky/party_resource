@@ -16,6 +16,7 @@ module PartyResource
         builder.call(raw_result)
       end
 
+      private
       def builder
         return lambda {|raw_result| raw_result} if wants_raw_result?
         return lambda {|raw_result| return_type.send(return_method,raw_result) } if wants_object?
