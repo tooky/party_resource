@@ -152,6 +152,37 @@ describe "PartyResource" do
       object.name.should == v1
       object.name2.should == v2
     end
+
+    it 'returns a hash representation of properties' do
+      subject.property :name, :name2
+      object.send(:populate_properties, :name => v1, :name2 => v2)
+      object.to_properties_hash.should == {:name => v1, :name2 => v2}
+    end
+
+    it 'does not include nil values in the properties hash' do
+      subject.property :name, :name2
+      object.send(:populate_properties, :name => v1)
+      object.to_properties_hash.should == {:name => v1}
+    end
+
+    it 'translates propery names to input names' do
+      subject.property :name, :from => :input_name
+      object.send(:populate_properties, :name => v1)
+      object.to_properties_hash.should == {:input_name => v1}
+    end
+
+    it 'translates propery names to nested input names' do
+      subject.property :name, :from => [:block, :input_name]
+      object.send(:populate_properties, :name => v1)
+      object.to_properties_hash.should == {:block => {:input_name => v1}}
+    end
+
+    it 'translates property names to their required output names' do
+      subject.property :name, :to => :output_name
+      subject.property :name2, :to => [:block, :output_name]
+      object.send(:populate_properties, :name => v1, :name2 => v2)
+      object.to_properties_hash.should == {:output_name => v1, :block => {:output_name => v2}}
+    end
   end
 
   describe '#properties_equal?' do
@@ -175,6 +206,7 @@ describe "PartyResource" do
       object.should_not be_properties_equal(object2)
     end
   end
+
 
 end
 

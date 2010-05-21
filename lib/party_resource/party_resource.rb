@@ -52,6 +52,12 @@ module PartyResource
     end
   end
 
+  def to_properties_hash
+    self.class.send(:property_list).inject({}) do |hash, property|
+      hash.merge(property.to_hash(self))
+    end
+  end
+
   private
   def populate_properties(hash)
     hash = hash.with_indifferent_access

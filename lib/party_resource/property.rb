@@ -18,6 +18,14 @@ module PartyResource
       input_hash(hash).has_key?(input_key) || hash.has_key?(name)
     end
 
+    def to_hash(context)
+      value = context.send(name)
+      return {} if value.nil?
+      output_keys.reverse.inject(value) do |value, key|
+        {key => value}
+      end
+    end
+
     private
     def retrieve_value(hash)
       input_hash(hash)[input_key] || hash[name]
@@ -31,6 +39,10 @@ module PartyResource
 
     def input_keys
       [@options[:from] || name].flatten
+    end
+
+    def output_keys
+      [@options[:to] || input_keys].flatten
     end
 
     def input_key

@@ -141,4 +141,11 @@ describe TestClass do
       end
     end
   end
+
+  describe '#to_property_hash' do
+    it 'converts an object to external hash representation' do
+      obj = TestClass.from_json(:value => 'v1', :value2 => 'v2', :nested_value => 'nv', :processed => 'Milk')
+      obj.to_properties_hash.should == {:input_name => 'v1', :value2 => 'v2', :block => {:var => 'nv'}, :output_name => 'Processed: Milk'}
+    end
+  end
 end

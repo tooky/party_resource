@@ -23,7 +23,7 @@ class TestClass < TestBaseClass
 
   property :other, :as => OtherClass
 
-  property :processed, :as => lambda { |data| "Processed: #{data}" }
+  property :processed, :as => lambda { |data| "Processed: #{data}" }, :to => :output_name
 
   def self.from_json(args)
     obj = self.new
@@ -32,7 +32,6 @@ class TestClass < TestBaseClass
   end
 
 end
-
 
 class InheritedTestClass < TestClass
   property :child_property
