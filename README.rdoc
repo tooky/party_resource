@@ -14,4 +14,4 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2010 Eden Development. See LICENSE for details.
+Copyright (c) 2010 Eden Development (UK) LTD. See LICENSE for details.
