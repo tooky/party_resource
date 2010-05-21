@@ -58,16 +58,17 @@ module PartyResource
     end
   end
 
+  def properties_equal?(other)
+    self.class.send(:property_list).all? {|property| self.send(property.name) == other.send(property.name) }
+  end
+
+
   private
   def populate_properties(hash)
     hash = hash.with_indifferent_access
     self.class.send(:property_list).each do |property|
       instance_variable_set("@#{property.name}", property.value_from(hash, self)) if property.has_value_in?(hash)
     end
-  end
-
-  def properties_equal?(other)
-    self.class.send(:property_list).all? {|property| self.send(property.name) == other.send(property.name) }
   end
 
   def self.included(klass)
