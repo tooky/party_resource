@@ -21,6 +21,7 @@ module PartyResource
     def to_hash(context)
       value = context.send(name)
       return {} if value.nil?
+      value = value.to_properties_hash if value.respond_to?(:to_properties_hash)
       output_keys.reverse.inject(value) do |value, key|
         {key => value}
       end

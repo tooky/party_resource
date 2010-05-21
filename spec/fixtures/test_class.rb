@@ -25,6 +25,8 @@ class TestClass < TestBaseClass
 
   property :processed, :as => lambda { |data| "Processed: #{data}" }, :to => :output_name
 
+  property :child, :as => OtherPartyClass
+
   def self.from_json(args)
     obj = self.new
     obj.send(:populate_properties, args)
@@ -36,3 +38,4 @@ end
 class InheritedTestClass < TestClass
   property :child_property
 end
+
