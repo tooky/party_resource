@@ -7,6 +7,9 @@ end
 
 class OtherPartyClass
   include PartyResource
+  party_connector :other_connector
+
+  connect :test, :get => '/url', :as => :raw
 
   property :thing
 

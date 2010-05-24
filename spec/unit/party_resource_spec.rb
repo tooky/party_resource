@@ -26,7 +26,7 @@ describe "PartyResource" do
 
       it "creates a new route" do
         options = {:values => other_options, :as => klass}
-        PartyResource::Route.should_receive(:new).with({:values => other_options, :as => klass})
+        PartyResource::Route.should_receive(:new).with({:values => other_options, :connector => nil, :as => klass})
         subject.connect :new_resource_method, options
       end
 
@@ -42,6 +42,17 @@ describe "PartyResource" do
         end
 
       end
+
+      context 'with a connector set' do
+        before do
+          subject.party_connector :foo
+        end
+
+        it 'passes the connector name to the route' do
+          PartyResource::Route.should_receive(:new).with(hash_including(:connector => :foo))
+          subject.connect :new_resource_method, {}
+        end
+      end
     end
 
     context 'for an instance level route' do
@@ -53,7 +64,7 @@ describe "PartyResource" do
 
       it "creates a new route" do
         options = {:on => :instance, :others => other_options}
-        PartyResource::Route.should_receive(:new).with({:others => other_options, :as => :self})
+        PartyResource::Route.should_receive(:new).with({:others => other_options, :connector => nil, :as => :self})
         subject.connect :new_resource_method, options
       end
 

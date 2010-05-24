@@ -21,6 +21,11 @@ describe TestClass do
       stub_request(:get, "http://fred:pass@myserver/path/find/99.ext?extra=options").to_return(:body => 'some data')
       TestClass.find(99, :extra => 'options').should == TestClass.new('some data')
     end
+
+    it 'uses other connectors' do
+      stub_request(:get, 'http://otherserver/url').to_return(:body => 'from the otherserver')
+      OtherPartyClass.test.should == 'from the otherserver'
+    end
   end
 
   describe 'instance level call' do

@@ -8,7 +8,7 @@ module PartyResource
 
     def connect(name, options={})
       level = options.delete(:on)
-      options = {:as => :self}.merge(options)
+      options = {:as => :self, :connector => @party_connector}.merge(options)
       route = Route.new(options)
 
       define_method_on(level, name) do |*args|
@@ -26,6 +26,10 @@ module PartyResource
         @property_list ||= []
         @property_list << Property.new(name, options)
       end
+    end
+
+    def party_connector(name)
+      @party_connector = name
     end
 
     private

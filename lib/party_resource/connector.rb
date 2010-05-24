@@ -16,7 +16,7 @@ module PartyResource
       repository.default = name
     end
 
-    def self.new(name, options)
+    def self.add(name, options)
       repository.new_connector(name, options)
     end
 
@@ -33,7 +33,7 @@ module PartyResource
 
       def new_connector(name, options)
         connectors[name] = Base.new(name, options)
-        self.default = name if default.nil?
+        self.default = name if default.nil? || options[:default]
       end
 
     end

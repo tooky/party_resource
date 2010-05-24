@@ -43,20 +43,32 @@ describe PartyResource::Connector do
       @repository = PartyResource::Connector::Repository.new
       PartyResource::Connector.stub(:repository => @repository)
       PartyResource::Connector::Base.stub(:new => connector)
+      options.stub(:[]).with(:default).and_return(false)
     end
 
     it 'creates a new connector' do
       PartyResource::Connector::Base.should_receive(:new).with(name, options).and_return(connector)
-      PartyResource::Connector.new(name, options)
+      PartyResource::Connector.add(name, options)
       PartyResource::Connector(name).should == connector
     end
 
     it 'sets the default if it is currently unset' do
       name2 = mock(:name2)
-      PartyResource::Connector.new(name, options)
+      PartyResource::Connector.add(name, options)
       PartyResource::Connector.repository.default.should == name
-      PartyResource::Connector.new(name2, options)
+
+      PartyResource::Connector.add(name2, options)
       PartyResource::Connector.repository.default.should == name
+    end
+
+    it 'sets the default if the default option is set' do
+      name2 = mock(:name2)
+      PartyResource::Connector.add(name, options)
+      PartyResource::Connector.repository.default.should == name
+
+      options.stub(:[]).with(:default).and_return(true)
+      PartyResource::Connector.add(name2, options)
+      PartyResource::Connector.repository.default.should == name2
     end
   end
 end
