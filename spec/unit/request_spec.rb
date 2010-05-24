@@ -7,6 +7,7 @@ describe PartyResource::Request do
   let_mock(:verb)
   let_mock(:value)
   let(:params) { {} }
+  let(:path) { '/path' }
 
   context 'with static path' do
     let(:path) { 'mypath/file.json' }
@@ -74,7 +75,7 @@ describe PartyResource::Request do
 
     context 'with no data' do
       let(:args) { {} }
-      its(:http_data) { { :body => args } }
+      its(:http_data) { should == {} }
     end
   end
 
@@ -82,12 +83,12 @@ describe PartyResource::Request do
     context "for a #{http_verb} request" do
       let(:verb) { http_verb }
       let(:args) { {:param => value} }
-      its(:http_data) { { :body => args } }
+      its(:http_data) { should == { :body => args } }
     end
 
     context 'with no data' do
       let(:args) { {} }
-      its(:http_data) { { :body => args } }
+      its(:http_data) { should == {} }
     end
   end
 
