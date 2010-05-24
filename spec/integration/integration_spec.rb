@@ -61,6 +61,13 @@ describe TestClass do
       TestClass.foo(908).should == ['New foo Improved', 'New data Improved']
     end
 
+    it 'passes "included" variables to the new object' do
+      v2 = mock(:v2)
+      stub_request(:get, "http://fred:pass@myserver/path/include").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{}')
+      test = TestClass.from_json(:value2 => v2)
+      test.include.should == OtherClass.new(:thing => v2)
+    end
+
     context 'error cases' do
       it 'raises ResourceNotFound' do
         stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 404)

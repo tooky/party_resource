@@ -13,7 +13,7 @@ module PartyResource
     def call(context, *args)
       options = args.pop if args.last.is_a?(Hash) && args.size == expected_args.size + 1
       raise ArgumentError, "wrong number of arguments (#{args.size} for #{expected_args.size})" unless expected_args.size == args.size
-      builder.call(connector.fetch(request(context, args, options)), context)
+      builder.call(connector.fetch(request(context, args, options)), context, included(context))
     end
 
     def connector
@@ -30,7 +30,7 @@ module PartyResource
     end
 
     def transform_options(options)
-      options = {:with => []}.merge(options)
+      options = {:with => [], :including => {}}.merge(options)
       transform_with_option(options)
       transform_location_options(options)
       options
@@ -49,6 +49,21 @@ module PartyResource
 
     def expected_args
       @options[:with]
+    end
+
+    def including
+      @options[:including]
+    end
+
+    def included(context)
+      return {} if including.empty?
+
+      context_hash = context.parameter_values(including.values)
+
+      including.inject({}) do |hash, pair|
+        hash[pair.first] = context_hash[pair.last]
+        hash
+      end
     end
 
   end

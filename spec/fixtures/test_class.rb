@@ -16,6 +16,8 @@ class TestClass < TestBaseClass
 
   connect :fetch_json, :get => '/big_data', :as => [:self, :from_json]
 
+  connect :include, :get => '/include', :on => :instance, :as => OtherClass, :including => {:thing => :value2}
+
   property :value, :from => :input_name
 
   property :value2, :value3

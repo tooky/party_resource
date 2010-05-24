@@ -11,7 +11,7 @@ module PartyResource
     end
 
     def value_from(hash, context)
-      builder.call retrieve_value(hash), context
+      builder.call retrieve_value(hash), context, {}
     end
 
     def has_value_in?(hash)
