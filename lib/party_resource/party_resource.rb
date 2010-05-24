@@ -59,7 +59,11 @@ module PartyResource
   end
 
   def properties_equal?(other)
-    self.class.send(:property_list).all? {|property| self.send(property.name) == other.send(property.name) }
+    begin
+      self.class.send(:property_list).all? {|property| self.send(property.name) == other.send(property.name) }
+    rescue NoMethodError
+      false
+    end
   end
 
 

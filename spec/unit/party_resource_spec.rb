@@ -205,6 +205,10 @@ describe "PartyResource" do
       object2.send(:populate_properties, :name => v1, :name2 => v1)
       object.should_not be_properties_equal(object2)
     end
+
+    it 'returns false if the other object does not respond to all required properties' do
+      object.should_not be_properties_equal(Object.new)
+    end
   end
 
 
