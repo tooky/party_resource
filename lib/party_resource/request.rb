@@ -11,9 +11,9 @@ module PartyResource
 
     def path
       args = @context.parameter_values(path_params - @args.keys).merge(@args)
-      path_params.inject(@path) do |path, param|
+      URI.encode(path_params.inject(@path) do |path, param|
         path.gsub(":#{param}", args[param].to_s)
-      end
+      end)
     end
 
     def data

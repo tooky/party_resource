@@ -92,4 +92,12 @@ describe PartyResource::Request do
     end
   end
 
+  context 'encoding the path' do
+    let(:args) { {} }
+    let(:path) { '/path needing encoding' }
+    it 'encodes the path' do
+      subject.path.should == '/path%20needing%20encoding'
+    end
+  end
+
 end
