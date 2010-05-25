@@ -44,7 +44,7 @@ module PartyResource
 
     def to_s
       code = ''
-      code = "#{data.code} " if data.respond_to?(:code)
+      code = "#{data.code} " rescue nil
       "A #{code}connection error occured"
     end
   end

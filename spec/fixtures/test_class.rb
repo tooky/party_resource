@@ -14,7 +14,7 @@ class TestClass < TestBaseClass
 
   connect :foo, :get => '/foo', :with => :value, :as => lambda {|data| "New #{data} Improved" }
 
-  connect :fetch_json, :get => '/big_data', :as => [:self, :from_json]
+  connect :fetch_json, :get => '/big_data', :as => [:self, :from_json], :rescue => {'ResourceNotFound' => nil}
 
   connect :include, :get => '/include', :on => :instance, :as => OtherClass, :including => {:thing => :value2}
 

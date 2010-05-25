@@ -89,6 +89,11 @@ describe TestClass do
         lambda { TestClass.destroy }.should raise_error(PartyResource::ServerError)
       end
 
+      it 'rescues exceptions' do
+        stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:status => 404)
+        TestClass.fetch_json.should be_nil
+      end
+
     end
   end
 
