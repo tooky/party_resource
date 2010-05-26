@@ -49,7 +49,7 @@ describe PartyResource::Connector do
     it 'creates a new connector' do
       PartyResource::Connector::Base.should_receive(:new).with(name, options).and_return(connector)
       PartyResource::Connector.add(name, options)
-      PartyResource::Connector(name).should == connector
+      PartyResource::Connector.lookup(name).should == connector
     end
 
     it 'sets the default if it is currently unset' do

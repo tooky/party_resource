@@ -23,7 +23,7 @@ module PartyResource
     end
 
     def connector
-      PartyResource::Connector(@options[:connector])
+      PartyResource::Connector.lookup(@options[:connector])
     end
 
     private

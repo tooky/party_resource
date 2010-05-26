@@ -84,25 +84,6 @@ describe "PartyResource" do
     end
   end
 
-  describe '.Connector' do
-    context 'with name == nil' do
-      it 'returns the default connector' do
-        connector = mock(:connector)
-        PartyResource::Connector.should_receive(:lookup).with(nil).and_return(connector)
-        PartyResource::Connector(nil).should == connector
-      end
-    end
-
-    context 'with a name given' do
-      it 'returns the requested connector' do
-        connector = mock(:connector)
-        name = mock(:name)
-        PartyResource::Connector.should_receive(:lookup).with(name).and_return(connector)
-        PartyResource::Connector(name).should == connector
-      end
-    end
-  end
-
   describe '.parameter_values' do
     let_mock(:v1)
     let_mock(:v2)

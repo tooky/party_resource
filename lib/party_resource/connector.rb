@@ -1,9 +1,5 @@
 require 'party_resource/connector/base'
 module PartyResource
-  def self.Connector(name = nil)
-    Connector.lookup(name)
-  end
-
   module Connector
     def self.lookup(name)
       name ||= repository.default

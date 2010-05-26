@@ -12,7 +12,7 @@ describe PartyResource::Route do
   let(:options) { { :get => path, :as => klass } }
 
   before do
-    PartyResource.stub(:Connector => connector)
+    PartyResource::Connector.stub(:lookup => connector)
   end
 
   describe ".call" do
