@@ -1,23 +1,29 @@
 require 'party_resource/connector/base'
 module PartyResource
   module Connector
-    def self.lookup(name)
-      name ||= repository.default
-      connector = repository.connectors[name]
-      raise Exceptions::NoConnector.new(name) if connector.nil?
-      connector
-    end
+    class << self
+      # Find connector by name
+      # @return [Connector::Base] the requested connector
+      def lookup(name)
+        name ||= repository.default
+        connector = repository.connectors[name]
+        raise Exceptions::NoConnector.new(name) if connector.nil?
+        connector
+      end
 
-    def self.default=(name)
-      repository.default = name
-    end
+      # Add a new named connector
+      def add(name, options)
+        repository.new_connector(name, options)
+      end
 
-    def self.add(name, options)
-      repository.new_connector(name, options)
-    end
+      private
+      def default=(name)
+        repository.default = name
+      end
 
-    def self.repository
-      @repository ||= Repository.new
+      def repository
+        @repository ||= Repository.new
+      end
     end
 
     class Repository
