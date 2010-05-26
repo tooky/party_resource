@@ -9,6 +9,7 @@ group :development do
   gem 'webmock'
   gem 'rspec'
   gem 'yard'
+  gem 'bluecloth'
   gem 'metric_fu'
   gem 'flog'
   gem 'reek'
