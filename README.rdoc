@@ -1,6 +1,8 @@
 = party_resource
 
-Description goes here.
+Simple REST interface for ruby objects.
+
+party_resource is a framework for building ruby objects which interact with a REST api. Built on top of HTTParty.
 
 == Note on Patches/Pull Requests
  

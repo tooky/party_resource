@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tristan Harris", "Steve Tooke"]
-  s.date = %q{2010-05-25}
-  s.description = %q{TODO: longer description of your gem}
+  s.date = %q{2010-05-26}
+  s.description = %q{party_resource is a framework for building ruby objects which interact with a REST api. Built on top of HTTParty.}
   s.email = %q{dev+party_resource@edendevelopment.co.uk}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
-  s.summary = %q{TODO: one-line summary of your gem}
+  s.summary = %q{Simple REST interface for ruby objects.}
   s.test_files = [
     "spec/fixtures/other_class.rb",
      "spec/fixtures/test_base_class.rb",

@@ -4,8 +4,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "party_resource"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Simple REST interface for ruby objects.}
+    gem.description = %Q{party_resource is a framework for building ruby objects which interact with a REST api. Built on top of HTTParty.}
     gem.email = "dev+party_resource@edendevelopment.co.uk"
     gem.homepage = "http://github.com/edendevelopment/party_resource.git"
     gem.authors = ["Tristan Harris", "Steve Tooke"]
