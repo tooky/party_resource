@@ -74,7 +74,7 @@ describe PartyResource::Connector::Base do
       it 'raises an exception' do
         return_data = mock(:data, :code => 404)
         HTTParty.should_receive(:get).and_return(return_data)
-        lambda{ subject.fetch(request) }.should raise_error(PartyResource::ConnectionError)
+        lambda{ subject.fetch(request) }.should raise_error(PartyResource::Exceptions::ConnectionError)
       end
     end
 

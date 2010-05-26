@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'Exceptions' do
 
-  describe PartyResource::ConnectionError do
-    subject { PartyResource::ConnectionError }
+  describe PartyResource::Exceptions::ConnectionError do
+    subject { PartyResource::Exceptions::ConnectionError }
 
     describe 'build' do
       let(:built) { subject.build(data) }
@@ -11,22 +11,22 @@ describe 'Exceptions' do
 
       it 'builds ResourceNotFound' do
         data.stub(:code => 404)
-        built.should be_a(PartyResource::ResourceNotFound)
+        built.should be_a(PartyResource::Exceptions::ResourceNotFound)
       end
 
       it 'builds ResourceInvalid' do
         data.stub(:code => 422)
-        built.should be_a(PartyResource::ResourceInvalid)
+        built.should be_a(PartyResource::Exceptions::ResourceInvalid)
       end
 
       it 'builds ClientError' do
         data.stub(:code => 400)
-        built.should be_a(PartyResource::ClientError)
+        built.should be_a(PartyResource::Exceptions::ClientError)
       end
 
       it 'builds ServerError' do
         data.stub(:code => 500)
-        built.should be_a(PartyResource::ServerError)
+        built.should be_a(PartyResource::Exceptions::ServerError)
       end
     end
   end

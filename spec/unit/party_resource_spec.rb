@@ -114,7 +114,7 @@ describe "PartyResource" do
 
     it 'raises a MissingParameter error' do
       subject.stub(:v1 => v1)
-      lambda { subject.parameter_values([:v1, :vx]) }.should raise_error(PartyResource::MissingParameter)
+      lambda { subject.parameter_values([:v1, :vx]) }.should raise_error(PartyResource::Exceptions::MissingParameter)
     end
   end
 

@@ -8,7 +8,7 @@ module PartyResource
     def self.lookup(name)
       name ||= repository.default
       connector = repository.connectors[name]
-      raise NoConnector.new(name) if connector.nil?
+      raise Exceptions::NoConnector.new(name) if connector.nil?
       connector
     end
 

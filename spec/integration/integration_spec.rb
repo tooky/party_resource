@@ -71,22 +71,22 @@ describe TestClass do
     context 'error cases' do
       it 'raises ResourceNotFound' do
         stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 404)
-        lambda { TestClass.destroy }.should raise_error(PartyResource::ResourceNotFound)
+        lambda { TestClass.destroy }.should raise_error(PartyResource::Exceptions::ResourceNotFound)
       end
 
       it 'raises ResourceInvalid' do
         stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 422)
-        lambda { TestClass.destroy }.should raise_error(PartyResource::ResourceInvalid)
+        lambda { TestClass.destroy }.should raise_error(PartyResource::Exceptions::ResourceInvalid)
       end
 
       it 'raises ClientError' do
         stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 405)
-        lambda { TestClass.destroy }.should raise_error(PartyResource::ClientError)
+        lambda { TestClass.destroy }.should raise_error(PartyResource::Exceptions::ClientError)
       end
 
       it 'raises ServerError' do
         stub_request(:delete, "http://fred:pass@myserver/path/delete").to_return(:status => 501)
-        lambda { TestClass.destroy }.should raise_error(PartyResource::ServerError)
+        lambda { TestClass.destroy }.should raise_error(PartyResource::Exceptions::ServerError)
       end
 
       it 'rescues exceptions' do

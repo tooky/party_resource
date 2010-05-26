@@ -22,7 +22,7 @@ describe PartyResource::Connector do
     end
 
     it 'raises a NoConnector error it the connector could not be found' do
-      lambda { PartyResource::Connector.lookup(:missing_name) }.should raise_error(PartyResource::NoConnector)
+      lambda { PartyResource::Connector.lookup(:missing_name) }.should raise_error(PartyResource::Exceptions::NoConnector)
     end
   end
 

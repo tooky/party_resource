@@ -49,7 +49,7 @@ module PartyResource
         begin
           out[var] = send(var)
         rescue
-          raise MissingParameter.new(var, self)
+          raise Exceptions::MissingParameter.new(var, self)
         end
         out
       end
