@@ -9,7 +9,7 @@ lots of objects that all need to connect to several routes on the api. ActiveRes
 
 ## Usage
 
-For detailed usage instructions, please see the [API Documentation](http://yardoc.org/docs/frames/edendevelopment-party_resource).
+For detailed usage instructions, please see the [API Documentation](http://yardoc.org/docs/edendevelopment-party_resource).
 
     PartyResource::Connector.add(:library, :base_uri => 'http://www.example.com/library')
 
