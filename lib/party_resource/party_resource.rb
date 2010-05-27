@@ -7,7 +7,39 @@ module PartyResource
     include MethodDefine
 
     # Connect a method call to a restful uri
+    # @param [Symbol] name for method
+    # @param [Hash] options the options to use to create the route
+    # @option options [String] :get/:put/:post/:delete URI to attach to (key provides the HTTP verb)
+    # @option options :as (:self) How to build data returned by the route
+    #
+    #   :raw - raw data
+    #
+    #   :self - self.new(data)
+    #
+    #   class - class.new(data)
+    #
+    #   Array(class, method_name) - class.method_name(data)
+    #
+    #   lambda - lambda.call(data)
+    # @option options [Array/Symbol] :with ([]) List of parameter names
+    # @option options :on (:class) Where to attach the method (:class/:instance)
+    # @option options [Hash<Symbol, Symbol>] :including ({}) Hash of extra values to pass into object creation
+    # @option options [Hash<String, Object>] :rescue ({}) Hash of {Exceptions Exception} names to catch and the value to return
     # @return [nil]
+    # @example
+    #   connect :find, :get => '/find/:id.ext', :with => :id, :on => :class
+    # @example
+    #   connect :update, :put => '/update/:var.ext', :on => :instance, :as => OtherClass
+    # @example
+    #   connect :save, :post => '/save/file', :with => :data, :as => :raw
+    # @example
+    #   connect :destroy, :delete => '/delete', :as => [OtherClass, :make_boolean]
+    # @example
+    #   connect :foo, :get => '/foo', :with => :value, :as => lambda {|data| "New #{data} Improved" }
+    # @example
+    #   connect :fetch_json, :get => '/big_data', :as => [:self, :from_json], :rescue => {'ResourceNotFound' => nil}
+    # @example
+    #   connect :include, :get => '/include', :on => :instance, :as => OtherClass, :including => {:thing => :value2}
     def connect(name, options={})
       level = options.delete(:on)
       options = {:as => :self, :connector => @party_connector}.merge(options)
@@ -44,6 +76,18 @@ module PartyResource
     #     symbol - name
     #
     #     array - list of nested hash keys
+    #   @example
+    #    property :value, :from => :input_name
+    #   @example
+    #    property :value2, :value3
+    #   @example
+    #    property :nested_value, :from => [:block, :var]
+    #   @example
+    #    property :other, :as => OtherClass
+    #   @example
+    #    property :processed, :as => lambda { |data| "Processed: #{data}" }, :to => :output_name
+    #   @example
+    #    property :child, :as => OtherPartyClass
     #   @return [nil]
     def property(*names)
       options = names.pop if names.last.is_a?(Hash)
@@ -59,6 +103,9 @@ module PartyResource
     end
 
     # Set the name of the connector to use for this class
+    # @param [Symbol] name Name of connector
+    # @example
+    #   party_connector :my_shiny_connector
     # @return [nil]
     def party_connector(name)
       @party_connector = name
@@ -76,7 +123,9 @@ module PartyResource
     end
   end
 
+  @private
   module ParameterValues
+    @private
     def parameter_values(list)
       list.inject({}) do |out, var|
         begin

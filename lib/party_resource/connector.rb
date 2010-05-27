@@ -12,6 +12,17 @@ module PartyResource
       end
 
       # Add a new named connector
+      # @param [Symbol] name Name for new connector
+      # @param [Hash] options
+      # @option options [String] :base_uri ('') URI to append to all routes using this connector
+      # @option options [String] :username HTTP basic auth username
+      # @option options [String] :password HTTP basic auth password
+      # @option options [Boolean] :default (false) Set this connector as the default
+      # @example
+      #   PartyResource::Connector.add(:other_connector, {:base_uri => 'http://otherserver/'})
+      # @example
+      #   PartyResource::Connector.add(:my_connector, {:base_uri => 'http://myserver/path', :username => 'fred', :password => 'pass', :default => true})
+
       def add(name, options)
         repository.new_connector(name, options)
       end
