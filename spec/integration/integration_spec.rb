@@ -176,6 +176,18 @@ describe TestClass do
   end
 
   describe 'logging' do
+    class TestLogger
+      attr_reader :text
+
+      def initialize
+        @text = []
+      end
+
+      def debug(text)
+        @text << text
+      end
+    end
+
     context 'with no logger' do
       it 'does not fail' do
         stub_request(:get, "http://fred:pass@myserver/path/find/99.ext").to_return(:body => 'some data')
@@ -185,27 +197,39 @@ describe TestClass do
 
     context 'with a logger object' do
       before do
-        @logger = mock(:logger)
+        @logger = TestLogger.new
         PartyResource.logger = @logger
       end
 
       it 'logs all api calls to debug' do
         stub_request(:get, "http://fred:pass@myserver/path/find/99.ext").to_return(:body => 'some data')
-        @logger.should_receive(:debug).with('** PartyResource GET call to /find/99.ext with {:basic_auth=>{:username=>"fred", :password=>"pass"}, :base_uri=>"http://myserver/path"}')
+
         TestClass.find(99)
+
+        @logger.text.first.should match(/\*\* PartyResource GET call to \/find\/99.ext with \{/)
+        @logger.text.first.should match(/:basic_auth=>\{/)
+        @logger.text.first.should match(/:username=>"fred"/)
+        @logger.text.first.should match(/:password=>"pass"/)
+        @logger.text.first.should match(/:base_uri=>"http:\/\/myserver\/path"/)
       end
     end
 
     context 'with a logger lambda' do
       before do
-        @logger = mock(:logger)
-        PartyResource.logger = lambda {|message| @logger.log(message) }
+        @logger = TestLogger.new
+        PartyResource.logger = @logger
       end
 
       it 'logs all api calls to debug' do
         stub_request(:get, "http://fred:pass@myserver/path/find/99.ext").to_return(:body => 'some data')
-        @logger.should_receive(:log).with('** PartyResource GET call to /find/99.ext with {:basic_auth=>{:username=>"fred", :password=>"pass"}, :base_uri=>"http://myserver/path"}')
+
         TestClass.find(99)
+
+        @logger.text.first.should match(/\*\* PartyResource GET call to \/find\/99.ext with \{/)
+        @logger.text.first.should match(/:basic_auth=>\{/)
+        @logger.text.first.should match(/:username=>"fred"/)
+        @logger.text.first.should match(/:password=>"pass"/)
+        @logger.text.first.should match(/:base_uri=>"http:\/\/myserver\/path"/)
       end
     end
 
