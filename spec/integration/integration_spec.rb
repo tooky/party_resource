@@ -7,6 +7,10 @@ describe TestClass do
 
   let(:object) {TestClass.new(:foo)}
 
+  after do
+    PartyResource.logger = nil
+  end
+
   describe 'class level call' do
     it 'raises an argument error when called with the wrong number of arguments' do
       lambda { TestClass.find }.should raise_error(ArgumentError)
@@ -169,5 +173,41 @@ describe TestClass do
       obj = TestClass.from_json(:value => 'v1', :value2 => 'v2', :nested_value => 'nv', :processed => 'Milk', :child => {:thing => 'Happiness'})
       obj.to_properties_hash.should == {:input_name => 'v1', :value2 => 'v2', :block => {:var => 'nv'}, :output_name => 'Processed: Milk', :child => {:thing => 'Happiness'}}
     end
+  end
+
+  describe 'logging' do
+    context 'with no logger' do
+      it 'does not fail' do
+        stub_request(:get, "http://fred:pass@myserver/path/find/99.ext").to_return(:body => 'some data')
+        TestClass.find(99)
+      end
+    end
+
+    context 'with a logger object' do
+      before do
+        @logger = mock(:logger)
+        PartyResource.logger = @logger
+      end
+
+      it 'logs all api calls to debug' do
+        stub_request(:get, "http://fred:pass@myserver/path/find/99.ext").to_return(:body => 'some data')
+        @logger.should_receive(:debug).with('** PartyResource GET call to /find/99.ext with {:basic_auth=>{:username=>"fred", :password=>"pass"}, :base_uri=>"http://myserver/path"}')
+        TestClass.find(99)
+      end
+    end
+
+    context 'with a logger lambda' do
+      before do
+        @logger = mock(:logger)
+        PartyResource.logger = lambda {|message| @logger.log(message) }
+      end
+
+      it 'logs all api calls to debug' do
+        stub_request(:get, "http://fred:pass@myserver/path/find/99.ext").to_return(:body => 'some data')
+        @logger.should_receive(:log).with('** PartyResource GET call to /find/99.ext with {:basic_auth=>{:username=>"fred", :password=>"pass"}, :base_uri=>"http://myserver/path"}')
+        TestClass.find(99)
+      end
+    end
+
   end
 end

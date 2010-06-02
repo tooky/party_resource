@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{party_resource}
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Tristan Harris", "Steve Tooke"]
-  s.date = %q{2010-05-26}
+  s.date = %q{2010-06-02}
   s.description = %q{party_resource is a framework for building ruby objects which interact with a REST api. Built on top of HTTParty.}
   s.email = %q{dev+party_resource@edendevelopment.co.uk}
   s.extra_rdoc_files = [

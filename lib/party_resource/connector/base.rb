@@ -11,7 +11,9 @@ module PartyResource
       end
 
       def fetch(request)
-        response = HTTParty.send(request.verb, request.path, request.http_data(options))
+        params = request.http_data(options)
+        log "** PartyResource #{request.verb.to_s.upcase} call to #{request.path} with #{params.inspect}"
+        response = HTTParty.send(request.verb, request.path, params)
         unless (200..399).include? response.code
           raise PartyResource::Exceptions::ConnectionError.build(response)
         end
@@ -19,6 +21,16 @@ module PartyResource
       end
 
     private
+
+      def log(message)
+        unless PartyResource.logger.nil?
+          if PartyResource.logger.is_a? Proc
+            PartyResource.logger.call message
+          else
+            PartyResource.logger.debug message
+          end
+        end
+      end
 
       def options=(options)
         @options = {}

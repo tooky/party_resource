@@ -3,6 +3,23 @@ Hash.send(:include, ActiveSupport::CoreExtensions::Hash::IndifferentAccess) unle
 
 module PartyResource
 
+  # Set logger to use
+  # @param logger One of:
+  #
+  #   nil - no logging
+  #
+  #   Proc - log using logger.call(message)
+  #
+  #   Object - log using logger.debug(message)
+  def self.logger=(logger)
+    @logger = logger
+  end
+
+  # @private
+  def self.logger
+    @logger
+  end
+
   module ClassMethods
     include MethodDefine
 
