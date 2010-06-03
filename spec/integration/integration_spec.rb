@@ -206,7 +206,7 @@ describe TestClass do
 
         TestClass.find(99)
 
-        @logger.text.first.should match(/\*\* PartyResource GET call to \/find\/99.ext with \{/)
+        @logger.text.first.should match(/^\*\* PartyResource GET call to \/find\/99.ext with \{/)
         @logger.text.first.should match(/:basic_auth=>\{/)
         @logger.text.first.should match(/:username=>"fred"/)
         @logger.text.first.should match(/:password=>"pass"/)
@@ -216,8 +216,7 @@ describe TestClass do
 
     context 'with a logger lambda' do
       before do
-        @logger = TestLogger.new
-        PartyResource.logger = @logger
+        PartyResource.logger = lambda {|message| @message = message}
       end
 
       it 'logs all api calls to debug' do
@@ -225,11 +224,11 @@ describe TestClass do
 
         TestClass.find(99)
 
-        @logger.text.first.should match(/\*\* PartyResource GET call to \/find\/99.ext with \{/)
-        @logger.text.first.should match(/:basic_auth=>\{/)
-        @logger.text.first.should match(/:username=>"fred"/)
-        @logger.text.first.should match(/:password=>"pass"/)
-        @logger.text.first.should match(/:base_uri=>"http:\/\/myserver\/path"/)
+        @message.should match(/^\*\* PartyResource GET call to \/find\/99.ext with \{/)
+        @message.should match(/:basic_auth=>\{/)
+        @message.should match(/:username=>"fred"/)
+        @message.should match(/:password=>"pass"/)
+        @message.should match(/:base_uri=>"http:\/\/myserver\/path"/)
       end
     end
 
