@@ -7,6 +7,10 @@ party_resource is a framework for building ruby objects which interact with a RE
 HTTParty is great for adding a couple of methods that fetch data from an HTTP api, but becomes cumbersome if you have
 lots of objects that all need to connect to several routes on the api. ActiveResource doesn't give you enough control.
 
+## Installation
+
+    gem install party_resource
+
 ## Usage
 
 For detailed usage instructions, please see the [API Documentation](http://yardoc.org/docs/edendevelopment-party_resource).
