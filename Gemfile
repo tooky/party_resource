@@ -1,17 +1,14 @@
-source :gemcutter
+source :rubygems
 
 gem 'httparty'
-gem 'activesupport', '>= 2.3.5'
+gem 'activesupport', '>=3.0.1'
 
 group :development do
   gem 'rake'
-  gem 'jeweler'
+  gem 'jeweler', git: 'git://github.com/technicalpickles/jeweler.git'
   gem 'webmock'
   gem 'rspec'
   gem 'yard'
   gem 'bluecloth'
   gem 'metric_fu'
-  gem 'flog'
-  gem 'reek'
-  gem 'roodi'
 end
