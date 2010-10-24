@@ -14,12 +14,16 @@ module PartyResource
       options = args.pop if args.last.is_a?(Hash) && args.size == expected_args.size + 1
       raise ArgumentError, "wrong number of arguments (#{args.size} for #{expected_args.size})" unless expected_args.size == args.size
       begin
-        builder.call(connector.fetch(request(context, args, options)), context, included(context))
+        builder.call(parsed_response(context, args, options), context, included(context))
       rescue Exceptions::Error => e
         name = e.class.name.split(/::/).last
         return @options[:rescue][name] if @options[:rescue].has_key?(name)
         raise
       end
+    end
+
+    def parsed_response(context, args, options)
+      connector.fetch(request(context, args, options)).parsed_response
     end
 
     def connector

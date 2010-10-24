@@ -7,7 +7,7 @@ group :development do
   gem 'rake'
   gem 'jeweler'
   gem 'webmock'
-  gem 'rspec'
+  gem 'rspec', '= 1.3.0'
   gem 'yard'
   gem 'bluecloth'
   gem 'metric_fu'

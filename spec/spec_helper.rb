@@ -6,7 +6,7 @@ require 'spec'
 require 'spec/autorun'
 require 'webmock/rspec'
 
-include WebMock
+include WebMock::API
 
 module LetMock
   def let_mock(name, options = {})

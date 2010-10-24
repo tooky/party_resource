@@ -6,7 +6,8 @@ describe PartyResource::Route do
 
   let_mock(:path)
   let_mock(:object)
-  let_mock(:raw_result)
+  let_mock(:parsed_response)
+  let(:raw_result) { mock(:raw_result, :parsed_response => parsed_response) }
   let(:connector) { mock(:connector, :fetch => raw_result) }
   let(:klass) { Class.new {def initialize(data); end} }
   let(:options) { { :get => path, :as => klass } }
@@ -67,7 +68,7 @@ describe PartyResource::Route do
       let_mock(:result_object)
 
       it 'builds an object from the data returned' do
-        klass.should_receive(:new).with(raw_result).and_return(result_object)
+        klass.should_receive(:new).with(parsed_response).and_return(result_object)
         subject.call(object).should == result_object
       end
     end
@@ -76,7 +77,7 @@ describe PartyResource::Route do
       let(:options) { { :get => path, :as => :raw } }
       it 'builds an object from the data returned' do
         klass.should_not_receive(:new)
-        subject.call(object).should == raw_result
+        subject.call(object).should == parsed_response
       end
     end
 
@@ -85,7 +86,7 @@ describe PartyResource::Route do
       let(:options) { { :get => path, :as => [klass, :builder] } }
 
       it 'builds an object from the data returned' do
-        klass.should_receive(:builder).with(raw_result).and_return(result_object)
+        klass.should_receive(:builder).with(parsed_response).and_return(result_object)
         subject.call(object).should == result_object
       end
     end
@@ -95,13 +96,13 @@ describe PartyResource::Route do
       let(:options) { { :get => path, :as => lambda {|data| data.morph } } }
 
       it 'builds an object from the data returned' do
-        raw_result.should_receive(:morph).and_return(result_object)
+        parsed_response.should_receive(:morph).and_return(result_object)
         subject.call(object).should == result_object
       end
     end
 
     context 'when returning an array' do
-      let(:raw_result) { [1, 2] }
+      let(:parsed_response) { [1, 2] }
       let(:options) { { :get => path, :as => lambda {|data| "X#{data}" } } }
       it 'builds each value individually' do
         subject.call(object).should == %w{ X1 X2 }

@@ -29,10 +29,10 @@ module PartyResource
 
       def self.build(data=nil)
         klass = case data.code
-          when 404: ResourceNotFound
-          when 422: ResourceInvalid
-          when 400..499: ClientError
-          when 500..599: ServerError
+          when 404 then ResourceNotFound
+          when 422 then ResourceInvalid
+          when 400..499 then ClientError
+          when 500..599 then ServerError
           else self
         end
         klass.new(data)
