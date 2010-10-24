@@ -1,13 +1,13 @@
 source :gemcutter
 
 gem 'httparty'
-gem 'activesupport', '>= 2.3.5'
+gem 'activesupport', '>= 3.0.1'
 
 group :development do
   gem 'rake'
   gem 'jeweler'
   gem 'webmock'
-  gem 'rspec', '= 1.3.0'
+  gem 'rspec', '>= 2.0.0'
   gem 'yard'
   gem 'bluecloth'
   gem 'metric_fu'

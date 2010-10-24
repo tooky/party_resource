@@ -27,14 +27,14 @@ module PartyResource
         repository.new_connector(name, options)
       end
 
+      def repository
+        @repository ||= Repository.new
+      end
       private
       def default=(name)
         repository.default = name
       end
 
-      def repository
-        @repository ||= Repository.new
-      end
     end
 
     class Repository

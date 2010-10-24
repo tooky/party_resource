@@ -2,8 +2,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'party_resource'
-require 'spec'
-require 'spec/autorun'
+require 'rspec'
 require 'webmock/rspec'
 
 include WebMock::API
@@ -14,7 +13,7 @@ module LetMock
   end
 end
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.extend(LetMock)
 end
 
