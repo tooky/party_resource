@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/technicalpickles/jeweler.git
+  revision: 8fdc49518b353faccba6a1ea08e5e43d40519a54
+  specs:
+    jeweler (1.5.0.pre5)
+      bundler (~> 1.0.0)
+      git (>= 1.2.5)
+      rake
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -25,7 +34,6 @@ GEM
     flog (2.5.0)
       ruby_parser (~> 2.0)
       sexp_processor (~> 3.0)
-    gemcutter (0.6.1)
     git (1.2.5)
     hirb (0.3.4)
     hoe (2.6.2)
@@ -33,10 +41,6 @@ GEM
       rubyforge (>= 2.0.4)
     httparty (0.6.1)
       crack (= 0.1.8)
-    jeweler (1.4.0)
-      gemcutter (>= 0.1.0)
-      git (>= 1.2.5)
-      rubyforge (>= 2.0.0)
     json_pure (1.4.6)
     main (4.2.0)
       arrayfields (>= 4.7.4)
@@ -95,13 +99,10 @@ PLATFORMS
 DEPENDENCIES
   activesupport (>= 3.0.1)
   bluecloth
-  flog
   httparty
-  jeweler
+  jeweler!
   metric_fu
   rake
-  reek
-  roodi
   rspec (>= 2.0.0)
   webmock
   yard
