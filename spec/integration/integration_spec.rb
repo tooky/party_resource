@@ -32,6 +32,13 @@ describe TestClass do
     end
   end
 
+  context 'passing options to the HTTP request' do
+    it 'passes the headers correctly' do
+      stub_request(:get, "http://fred:pass@myserver/path/find/99.ext").with(:headers => { 'Content-type' => 'test/header-value' })
+      TestClass.find(99)
+    end
+  end
+
   describe 'instance level call' do
     it 'gets the result' do
       stub_request(:put, "http://fred:pass@myserver/path/update/99.ext").to_return(:body => 'updated data')
