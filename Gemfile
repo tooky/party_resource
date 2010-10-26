@@ -2,6 +2,7 @@ source :rubygems
 
 gem 'httparty'
 gem 'activesupport', '>= 3.0.1'
+gem 'activesupport', '>=3.0.1'
 
 group :development do
   gem 'rake'

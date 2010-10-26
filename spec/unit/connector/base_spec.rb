@@ -26,7 +26,7 @@ describe PartyResource::Connector::Base do
       let(:options) { { :username => username } }
 
       it 'stores the username' do
-        subject.options.should == {:basic_auth => {:username => username, :password => nil} }
+        subject.options.should == { :basic_auth => {:username => username, :password => nil} }
       end
     end
 
@@ -34,7 +34,7 @@ describe PartyResource::Connector::Base do
       let(:options) { { :password => password } }
 
       it 'stores the password' do
-        subject.options.should == {:basic_auth => {:password => password, :username => nil} }
+        subject.options.should == { :basic_auth => {:password => password, :username => nil} }
       end
     end
 
@@ -46,17 +46,19 @@ describe PartyResource::Connector::Base do
     end
 
     context 'with all options' do
-      let(:options) { { :base_uri => original_uri,
+      let(:options) { {
+        :base_uri => original_uri,
         :username => username,
         :password => password,
         :headers => { "X" => "Y" }
       } }
 
       it 'stores the options' do
-        subject.options.should == {:base_uri => normalized_uri, 
-                                   :basic_auth => {
-          :password => password, :username => username },
-          :headers => { "X" => "Y" } }
+        subject.options.should == {
+          :base_uri => normalized_uri, 
+          :basic_auth => { :password => password, :username => username },
+          :headers => { "X" => "Y" }
+        }
       end
     end
   end
