@@ -39,6 +39,7 @@ module PartyResource
         if options.has_key?(:username) || options.has_key?(:password)
           @options[:basic_auth] = {:username => options[:username], :password => options[:password]}
         end
+        @options[:headers] = options[:headers] if options.has_key?(:headers)
       end
 
     end

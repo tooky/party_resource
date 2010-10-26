@@ -38,12 +38,25 @@ describe PartyResource::Connector::Base do
       end
     end
 
+    context 'with http headers' do
+      let(:headers) { { "Header-Key" => "Value" } }
+      let(:options) { { :headers => headers } }
+
+      its(:options) { should == {:headers => headers} }
+    end
+
     context 'with all options' do
-      let(:options) { { :base_uri => original_uri, :username => username, :password => password } }
+      let(:options) { { :base_uri => original_uri,
+        :username => username,
+        :password => password,
+        :headers => { "X" => "Y" }
+      } }
 
       it 'stores the options' do
         subject.options.should == {:base_uri => normalized_uri, 
-                                   :basic_auth => {:password => password, :username => username } }
+                                   :basic_auth => {
+          :password => password, :username => username },
+          :headers => { "X" => "Y" } }
       end
     end
   end

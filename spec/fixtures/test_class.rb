@@ -1,5 +1,5 @@
 PartyResource::Connector.add(:other_connector, {:base_uri => 'http://otherserver/'})
-PartyResource::Connector.add(:my_connector, {:base_uri => 'http://myserver/path', :username => 'fred', :password => 'pass', :default => true})
+PartyResource::Connector.add(:my_connector, {:base_uri => 'http://myserver/path', :username => 'fred', :password => 'pass', :default => true, :headers => {"Content-type" => "test/header-value"}})
 
 class TestClass < TestBaseClass
   include PartyResource
