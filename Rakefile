@@ -6,8 +6,8 @@ begin
     gem.name = "party_resource"
     gem.summary = %Q{Simple REST interface for ruby objects.}
     gem.description = %Q{party_resource is a framework for building ruby objects which interact with a REST api. Built on top of HTTParty.}
-    gem.email = "dev+party_resource@edendevelopment.co.uk"
-    gem.homepage = "http://github.com/edendevelopment/party_resource.git"
+    gem.email = "steve@heavi.es"
+    gem.homepage = "http://github.com/tooky/party_resource.git"
     gem.authors = ["Tristan Harris", "Steve Tooke"]
     gem.add_runtime_dependency "httparty", ">= 0.5.2"
     gem.add_runtime_dependency "activesupport", ">= 2.3.5"
