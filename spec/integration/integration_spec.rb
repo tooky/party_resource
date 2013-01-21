@@ -68,7 +68,8 @@ describe TestClass do
     end
 
     it 'builds each value in an array individually' do
-      stub_request(:get, "http://fred:pass@myserver/path/foo?value=908").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '[foo,data]')
+      stub_request(:get, "http://fred:pass@myserver/path/foo?value=908")
+        .to_return(:headers => {'Content-Type' => 'text/json'}, :body => '["foo","data"]')
       TestClass.foo(908).should == ['New foo Improved', 'New data Improved']
     end
 
@@ -110,7 +111,9 @@ describe TestClass do
 
   describe 'populating properties' do
     it 'populates result values' do
-      stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value2:"value2", value4:"ignored"}')
+      stub_request(:get, "http://fred:pass@myserver/path/big_data")
+        .to_return(:headers => {'Content-Type' => 'text/json'},
+                   :body => '{"value2":"value2", "value4":"ignored"}')
       result = TestClass.fetch_json
       result.value2.should == 'value2'
       result.value3.should == nil
@@ -118,56 +121,75 @@ describe TestClass do
     end
 
     it 'populates renamed values' do
-      stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{input_name:"value"}')
+      stub_request(:get, "http://fred:pass@myserver/path/big_data")
+        .to_return(:headers => {'Content-Type' => 'text/json'},
+                   :body => '{"input_name":"value"}')
       result = TestClass.fetch_json
       result.value.should == 'value'
     end
 
     it 'populates nested values' do
-      stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{block:{var:"value"}}')
+      stub_request(:get, "http://fred:pass@myserver/path/big_data")
+        .to_return(:headers => {'Content-Type' => 'text/json'},
+                   :body => '{"block":{"var":"value"}}')
       result = TestClass.fetch_json
       result.nested_value.should == 'value'
     end
 
     it 'falls back to populating based on the property name if from is not found' do
-      stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value:"value"}')
+      stub_request(:get, "http://fred:pass@myserver/path/big_data")
+        .to_return(:headers => {'Content-Type' => 'text/json'},
+                   :body => '{"value":"value"}')
       result = TestClass.fetch_json
       result.value.should == 'value'
     end
 
     it 'populates a property as another class' do
-      stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{other: "value"}')
+      stub_request(:get, "http://fred:pass@myserver/path/big_data")
+        .to_return(:headers => {'Content-Type' => 'text/json'},
+                   :body => '{"other": "value"}')
       result = TestClass.fetch_json
       result.other.should == OtherClass.new('value')
     end
 
     it 'populates a property with a proc' do
-      stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{processed: "value"}')
+      stub_request(:get, "http://fred:pass@myserver/path/big_data")
+        .to_return(:headers => {'Content-Type' => 'text/json'},
+                   :body => '{"processed": "value"}')
       result = TestClass.fetch_json
       result.processed.should == "Processed: value"
     end
 
     it 'does not build null data' do
-      stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{processed: null}')
+      stub_request(:get, "http://fred:pass@myserver/path/big_data").
+        to_return(:headers => {'Content-Type' => 'text/json'},
+                  :body => '{"processed": null}')
       result = TestClass.fetch_json
       result.processed.should == nil
     end
 
     it 'builds each value when populating an array' do
-      stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{processed: [1,2,3,4]}')
+      stub_request(:get, "http://fred:pass@myserver/path/big_data")
+        .to_return(:headers => {'Content-Type' => 'text/json'},
+                   :body => '{"processed": [1,2,3,4]}')
       result = TestClass.fetch_json
-      result.processed.should == ['Processed: 1','Processed: 2','Processed: 3','Processed: 4']
+      result.processed.should == ['Processed: 1','Processed: 2',
+                                  'Processed: 3','Processed: 4']
     end
 
     context 'and inherited class' do
       it 'self refers to the child class' do
-        stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value2:"value2", child_property:"child"}')
+        stub_request(:get, "http://fred:pass@myserver/path/big_data")
+          .to_return(:headers => {'Content-Type' => 'text/json'},
+                     :body => '{"value2":"value2", "child_property":"child"}')
         result = InheritedTestClass.fetch_json
         result.should be_a(InheritedTestClass)
       end
 
       it 'all local and inherited properties are available' do
-        stub_request(:get, "http://fred:pass@myserver/path/big_data").to_return(:headers => {'Content-Type' => 'text/json'}, :body => '{value2:"value2", child_property:"child"}')
+        stub_request(:get, "http://fred:pass@myserver/path/big_data")
+          .to_return(:headers => {'Content-Type' => 'text/json'},
+                     :body => '{"value2":"value2", "child_property":"child"}')
         result = InheritedTestClass.fetch_json
         result.child_property.should == 'child'
         result.value2.should == 'value2'
@@ -177,8 +199,12 @@ describe TestClass do
 
   describe '#to_property_hash' do
     it 'converts an object to external hash representation' do
-      obj = TestClass.from_json(:value => 'v1', :value2 => 'v2', :nested_value => 'nv', :processed => 'Milk', :child => {:thing => 'Happiness'})
-      obj.to_properties_hash.should == {:input_name => 'v1', :value2 => 'v2', :block => {:var => 'nv'}, :output_name => 'Processed: Milk', :child => {:thing => 'Happiness'}}
+      obj = TestClass.from_json(
+        :value => 'v1', :value2 => 'v2', :nested_value => 'nv',
+        :processed => 'Milk', :child => {:thing => 'Happiness'})
+      obj.to_properties_hash.should == {
+        :input_name => 'v1', :value2 => 'v2', :block => {:var => 'nv'},
+        :output_name => 'Processed: Milk', :child => {:thing => 'Happiness'}}
     end
   end
 
